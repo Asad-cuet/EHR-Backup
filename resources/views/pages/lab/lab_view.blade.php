@@ -1,6 +1,18 @@
 @extends('layout.lay')
 
 @section('title','Lab View')
+@section('css')
+label {
+      cursor: pointer;
+      /* Style as you please, it will become the visible UI component. */
+   }
+   
+   #upload-photo {
+      opacity: 0;
+      position: absolute;
+      z-index: -1;
+   }
+@endsection
 @section('content')
 
 <div class="row">
@@ -48,32 +60,51 @@
                   
                   <li class="list-group-item bg-dark text-white" aria-current="true">Submitted Test</li> 
                   @foreach ($test as $item)
-                  <li class="list-group-item" aria-current="true">
-                        <b>{{$item->test->test_name}}</b>
-                        @if($item->report!=0)
-                        <a href="{{asset('assets/report/'.$item->report)}}" class="btn btn-info badge" target="_blank">view</a>
-                        <a href="{{url('/lab-update/'.$item->id.'/'.$item->consultation_id.'/'.$item->test_id)}}" class="btn btn-dark badge">update</a>
-                        <a href="{{url('/lab-delete/'.$item->id.'/'.$item->consultation_id.'/'.$item->test_id)}}" onclick="return confirm('Are you sure? You want to delete?')" class="btn btn-danger badge">delete</a>
-                        @if($item->is_resent)
-                        <span class="badge bg-primary">Re-Sent</span>
-                        @endif
-                        @if($item->comment)
-                        <div class="mt-3">
-                              <h6>Comment from Laboratory:</h6> {{$item->comment}}
-                        </div>
-                        @endif
-                        <div class="mt-3">
-                              <form action="{{url('/lab-comment/'.$item->id)}}" method="POST">
-                                    @csrf
-                                    <input type="text" name="comment" placeholder="Write a comment if any">
-                                    <button type="submit" class="btn btn-warning badge">@if($item->comment)Update Comment @else Comment @endif</button>
-                              </form>
-                        </div>
+                        <li class="list-group-item" aria-current="true">
+                        <div class="row">
+                              <div class="col">
+                                    <b>{{$item->test->test_name}}</b>
+                                    @if($item->report!=0)
+                                          <a href="{{asset('assets/report/'.$item->report)}}" class="btn btn-info badge" target="_blank">view</a>
+                                          @if(!$item->is_resent)
+                                                <a href="{{url('/lab-delete/'.$item->id.'/'.$item->consultation_id.'/'.$item->test_id)}}" onclick="return confirm('Are you sure? You want to delete?')" class="btn btn-danger badge">delete</a>
+                                          @endif
+                                          @if($item->is_resent)
+                                                <span class="badge bg-primary">Re-Sent (Update this report)</span>
+                                          @endif
+                                          @if($item->comment)
+                                                <div class="mt-3">
+                                                      <h6>Comment from Laboratory:</h6> {{$item->comment}}
+                                                </div>
+                                          @endif
+                                          <div class="mt-3">
+                                                <form action="{{url('/lab-comment/'.$item->id)}}" method="POST">
+                                                      @csrf
+                                                      <input type="text" name="comment" placeholder="Write a comment if any">
+                                                      <button type="submit" class="btn btn-warning badge">@if($item->comment)Update Comment @else Comment @endif</button>
+                                                </form>
+                                          </div>
+                                    @else
+                                          <div class="badge bg-danger">Didn't Submitted Yet</div>
+                                    @endif
+                              </div>
+                              <div class="col">
+                                    @if($item->report!=0)
+                                          <b>Update Report</b>
+                                          <div class="mt-2">
+                                                <form action="{{url('/lab-update/'.$item->id)}}" method="POST" enctype="multipart/form-data">
+                                                      @csrf
+                                                      <input type="file" name="updated_report" style="font-size:14px"/>
+                                                      <button type="submit" class="btn btn-dark badge">Update</button>
+                                                </form>
+                                          </div>
+                                          
 
-                        @else
-                        <div class="badge bg-danger">Didn't Submitted Yet</div>
-                        @endif
-                  </li>                     
+                                    @endif
+                              </div>
+                              
+                        </div>          
+                        </li>                     
                   @endforeach 
 
             </ul>

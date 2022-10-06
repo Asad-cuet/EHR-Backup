@@ -18,18 +18,18 @@ Route::get('/', function () {
 });
 
 Auth::routes([
-    'register' => false, // Registration Routes...
-    'reset' => false, // Password Reset Routes...
-    'verify' => false, // Email Verification Routes...
+    'register' => true, // Registration Routes...
   ]);
-Auth::routes();
+//Auth::routes();
 Route::middleware(['auth'])->group(function () {
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/patients', [App\Http\Controllers\PatientController::class, 'patients'])->name('patients');
 Route::get('/patient-form', [App\Http\Controllers\PatientController::class, 'patient_form'])->name('patient_form');
 Route::post('/add-patient', [App\Http\Controllers\PatientController::class, 'add_patient'])->name('add_patient');
 Route::get('/patient-view/{id}', [App\Http\Controllers\PatientController::class, 'patient_view'])->name('patient_view');
+Route::get('/patient-status/{history_id}', [App\Http\Controllers\PatientController::class, 'patient_status'])->name('patient_status');
 Route::post('/update-patient/{id}', [App\Http\Controllers\PatientController::class, 'patient_update'])->name('patient_update');
 Route::get('/consultant/{id}', [App\Http\Controllers\PatientController::class, 'consultant'])->name('consultant');
 Route::post('/consultant-to/{patient_id}', [App\Http\Controllers\PatientController::class, 'consultant_to'])->name('consultant_to');
@@ -74,7 +74,7 @@ Route::get('/lab-view/{consultation_id}', [App\Http\Controllers\LabController::c
 Route::get('/lab-clear/{consultation_id}', [App\Http\Controllers\LabController::class,'lab_clear'])->name('lab_clear');
 Route::get('/lab-resend/{exam_id?}/{consultaion_id?}', [App\Http\Controllers\LabController::class,'lab_resend'])->name('lab_resend');
 Route::post('/lab-comment/{exam_id}', [App\Http\Controllers\LabController::class,'lab_comment'])->name('lab_comment');
-Route::get('/lab-update/{exam_id?}/{consultation_id?}/{test_id}', [App\Http\Controllers\LabController::class, 'lab_update'])->name('lab_update');
+Route::post('/lab-update/{exam_id?}', [App\Http\Controllers\LabController::class, 'lab_update'])->name('lab_update');
 Route::get('/lab-delete/{exam_id?}/{consultation_id}/{test_id}', [App\Http\Controllers\LabController::class, 'lab_delete'])->name('lab_delete');
 Route::post('/submit-report/{consultation_id}', [App\Http\Controllers\LabController::class, 'submit_report'])->name('submit_report');
 });

@@ -7,6 +7,7 @@ use App\Models\Patient;
 use App\Models\Doctor;
 use App\Models\ClinicalHistory;
 use App\Models\consultation;
+use App\Models\Exam;
 use Illuminate\Support\Collection;
 
 class PatientController extends Controller
@@ -131,6 +132,17 @@ class PatientController extends Controller
         ClinicalHistory::create(['patient_id'=>$patient_id]);
         return redirect(route('patients'))->with('status','Patient sent to Consultation');
 
+
+    }
+
+    public function patient_status($history_id)
+    {
+        $patient=Patient::where('history_id',$history_id)->first();
+        $consultation=consultation::where('id',$patient->id)->first();
+        $test=Exam::where('consultation_id',$consultation->id)->get();
+        $history=ClinicalHistory::where('patient_id',$consultation->patient_id)->first();
+        
+        return view('pages.patient.patient_status',['consultation'=>$consultation,'test'=>$test,'history'=>$history]);
 
     }
 }

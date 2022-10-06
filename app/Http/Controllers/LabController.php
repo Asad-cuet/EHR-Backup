@@ -138,6 +138,50 @@ class LabController extends Controller
 
 
 
+    public function lab_update(Request $request,$exam_id)
+    {
+        if(empty($request->file('updated_report')))
+        {
+            return back()->with('danger','Cannot Submit Empty');
+        }
+        else
+        {
+            //dd('catch');
+            $file=$request->file('updated_report');
+            $extention=$file->getClientOriginalExtension();  
+            if(array_search($extention,['example','jpg','png','jprg','gif','pdf']))
+            {
+                 $filename=time().'.'.$extention;
+                 $file->move('assets/report/',$filename);  
+                 if($file)
+                 {
+                      $old_report=Exam::where('id',$exam_id)->first()->report;
+                      $old_report='assets/report/'.$old_report;
+                      if(File::exists($old_report))
+                      {
+                           File::delete($old_report);
+                           $exam=Exam::where('id',$exam_id)->first();
+                           $exam->report=$filename;
+                           if($exam->is_resent==1)
+                           {
+                               $exam->is_resent=0;
+                           }
+                           $exam->update();
+                           return back()->with('status','Report Updated Successfully');
+
+                      }
+                 }
+
+            }
+            else
+            {
+                 return back()->with('danger', $extention.' file is not allowed');
+            }
+
+        }
+        
+        
+    }
     public function lab_delete($exam_id,$consultation_id,$test_id)
     {
         if(Exam::where('consultation_id',$consultation_id)->where('test_id',$test_id)->count()>1)  //multiple report uploaded
@@ -208,7 +252,7 @@ class LabController extends Controller
         'is_on_exam'=>1
         ];
         consultation::where('id',$consultation_id)->update($data);
-        return redirect(route('lab'))->with('status', "A patient's sent to Lab");
+        return redirect(route('consultations'))->with('status', "A patient sent to Lab");
     }
 
 }

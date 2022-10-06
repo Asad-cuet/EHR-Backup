@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layout.lay')
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                <div class="card-header">Registration of Administration & Lab Tecknician</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
@@ -32,6 +32,33 @@
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
 
                                 @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Register As') }}</label>
+
+                            <div class="col-md-6">
+
+                                <div class="form-check">
+                                    <input class="form-check-input" value="administration" type="radio" name="role_as" id="flexRadioDefault1" required>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                      Administration
+                                    </label>
+                                  </div>
+                                  <div class="form-check">
+                                    <input class="form-check-input" value="lab_tecknician" type="radio" name="role_as" id="flexRadioDefault2" required>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                      Lab Tecknician
+                                    </label>
+                                  </div>
+
+                                @error('role_as')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
