@@ -18,6 +18,7 @@ class PatientController extends Controller
         {
             return [
                 'id'=>$item['id'],
+                'pre_name'=>$item['pre_name'],
                 'fname'=>$item['fname'],
                 'lname'=>$item['lname'],
                 'gender'=>$item['gender'],

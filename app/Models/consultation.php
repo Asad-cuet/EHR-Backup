@@ -40,6 +40,6 @@ class consultation extends Model
                 }
     public function exam()  //making relationship
                 {
-                     return $this->hasMany(Exam::class,'consultation_id','id');
+                     return $this->hasMany(Exam::class,'id','consultation_id');
                 }
 }

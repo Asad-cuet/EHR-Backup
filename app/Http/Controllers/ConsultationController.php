@@ -71,7 +71,8 @@ class ConsultationController extends Controller
         {
             $data=[
                     'consultation_id'=>$consultation_id,
-                    'test_id'=>$test_id[$i]
+                    'test_id'=>$test_id[$i],
+                    'report'=>0
             ];
             Exam::create($data);
         }    

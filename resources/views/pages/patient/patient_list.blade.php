@@ -21,7 +21,7 @@
       @foreach ($patients as $item)
       <tr>
          <td>{{$item['id']}}</td>
-         <td>{{$item['fname']}} {{$item['lname']}}</td>
+         <td>{{$item['pre_name']}} {{$item['fname']}} {{$item['lname']}}</td>
          <td>{{$item['gender']}}</td>
          <td>{{$item['age']}}</td>
          <td>{{$item['weight']}}</td>

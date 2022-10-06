@@ -62,7 +62,15 @@
       <li class="list-group-item active" aria-current="true">Given Test</li>
       @foreach ($test as $item)
             <li class="list-group-item">
-                  <b>{{$item->test->test_name}} : </b> Image  
+                  <b>{{$item->test->test_name}} : </b>
+                  @if(!empty($item->report))
+                        <a href="{{asset('assets/report/'.$item->report)}}" class="badge btn btn-dark" target="_blank" rel="noopener noreferrer">View</a>  
+                        <a href="{{url('/lab-resend/'.$item->id.'/'.$item->consultation_id)}}" onclick="return confirm('Are You Sure?')" class="badge btn btn-danger" rel="noopener noreferrer">Re Send to Lab</a>  
+                  @else
+                        Didn't Made Yet
+                  @endif
+                  
+                  
             </li>
       @endforeach
 

@@ -15,7 +15,7 @@
                       </a>
                       <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                           <nav class="sb-sidenav-menu-nested nav">
-                              <a class="nav-link" href="{{url('/patients')}}">Patient List</a>
+                              <a class="nav-link" href="{{url('/patients')}}">Find Patient</a>
                               <a class="nav-link" href="{{url('/patient-form')}}">Patient Registration</a>
                           </nav>
                       </div>
@@ -26,7 +26,7 @@
                       </a>
                       <div class="collapse" id="doctor" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                           <nav class="sb-sidenav-menu-nested nav">
-                              <a class="nav-link" href="{{url('/doctors')}}">Doctor List</a>
+                              <a class="nav-link" href="{{url('/doctors')}}">Find Doctor</a>
                               <a class="nav-link" href="{{url('/doctor-form')}}">Doctor Registration</a>
                           </nav>
                       </div>

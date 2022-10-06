@@ -11,29 +11,28 @@
                   <li class="list-group-item" aria-current="true">Name: {{$lab->patient->name}}</li>  
                   <li class="list-group-item" aria-current="true">Gender: {{$lab->patient->gender}}</li>  
                   <li class="list-group-item" aria-current="true">Age: {{$lab->patient->age}}</li>  
-                  <li class="list-group-item" aria-current="true">Weight: {{$lab->patient->weight}}</li>  
+                  <li class="list-group-item" aria-current="true">Height: {{$lab->patient->height}} Fit</li>  
+                  <li class="list-group-item" aria-current="true">Weight: {{$lab->patient->weight}} Kg</li>  
                   <li class="list-group-item" aria-current="true">Phone: {{$lab->patient->phone}}</li>  
+                  <li class="list-group-item" aria-current="true">Guardian Phone: {{$lab->patient->guardian_phone}}</li>  
             </ul>
       </div>
       <div class="col">
             <form action="{{url('/submit-report/'.$lab->id)}}" method="post" enctype="multipart/form-data">
-                  @csrf
+            @csrf
             <ul class="list-group">
                   <li class="list-group-item bg-danger text-white" aria-current="true">Exam</li>
-                  @foreach ($test as $item)
+                  @for($i=0;$i<count($unique_test_id);$i++)
                   <li class="list-group-item">
-                        <b>{{$item->test->test_name}}</b>
+                        <b>{{$unique_test_name[$i]}}</b>
+                        {{-- <div class="badge bg-success">Submit Another</div> --}}
                         <div class="">
-                              @if(empty($item->report))
+                              
                               <input type="file" name="image[]">
-                              <input type="hidden" name="test_id[]" value="{{$item->test_id}}">
-                              @else
-                              <div class="badge bg-success">Submitted</div>
-
-                              @endif
+                              <input type="hidden" name="test_id[]" value="{{$unique_test_id[$i]}}">                              
                         </div>
                   </li>
-                  @endforeach  
+                  @endfor
                   <li class="list-group-item text-center" aria-current="true">
                   <button type="submit" class="btn btn-dark">Submit Report</button>      
                   </li>    
@@ -42,5 +41,53 @@
       </div>
 </div>
 
+<br>
+<div class="row">
+      <div class="col">
+            <ul class="list-group">
+                  
+                  <li class="list-group-item bg-dark text-white" aria-current="true">Submitted Test</li> 
+                  @foreach ($test as $item)
+                  <li class="list-group-item" aria-current="true">
+                        <b>{{$item->test->test_name}}</b>
+                        @if($item->report!=0)
+                        <a href="{{asset('assets/report/'.$item->report)}}" class="btn btn-info badge" target="_blank">view</a>
+                        <a href="{{url('/lab-update/'.$item->id.'/'.$item->consultation_id.'/'.$item->test_id)}}" class="btn btn-dark badge">update</a>
+                        <a href="{{url('/lab-delete/'.$item->id.'/'.$item->consultation_id.'/'.$item->test_id)}}" onclick="return confirm('Are you sure? You want to delete?')" class="btn btn-danger badge">delete</a>
+                        @if($item->is_resent)
+                        <span class="badge bg-primary">Re-Sent</span>
+                        @endif
+                        @if($item->comment)
+                        <div class="mt-3">
+                              <h6>Comment from Laboratory:</h6> {{$item->comment}}
+                        </div>
+                        @endif
+                        <div class="mt-3">
+                              <form action="{{url('/lab-comment/'.$item->id)}}" method="POST">
+                                    @csrf
+                                    <input type="text" name="comment" placeholder="Write a comment if any">
+                                    <button type="submit" class="btn btn-warning badge">@if($item->comment)Update Comment @else Comment @endif</button>
+                              </form>
+                        </div>
+
+                        @else
+                        <div class="badge bg-danger">Didn't Submitted Yet</div>
+                        @endif
+                  </li>                     
+                  @endforeach 
+
+            </ul>
+      </div>
+</div>
+<br>
+<div class="row">
+      <div class="col ">
+            <a href="{{url('lab-clear/'.$lab->id)}}" class="btn btn-primary" onclick="return confirm('Are yo sure?')">Send Back to Consultation</a>
+      </div>
+</div>
+<br>
+<br>
+<br>
+<br>
 
 @endsection

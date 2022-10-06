@@ -17,6 +17,11 @@ Route::get('/', function () {
     return redirect('login');
 });
 
+Auth::routes([
+    'register' => false, // Registration Routes...
+    'reset' => false, // Password Reset Routes...
+    'verify' => false, // Email Verification Routes...
+  ]);
 Auth::routes();
 Route::middleware(['auth'])->group(function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -65,6 +70,11 @@ Route::post('/submit-exam/{consultation_id}', [App\Http\Controllers\Consultation
 
 
 Route::get('/lab', [App\Http\Controllers\LabController::class, 'lab'])->name('lab');
-Route::get('/lab-view/{consultation_id}', [App\Http\Controllers\LabController::class, 'lab_view'])->name('lab_view');
+Route::get('/lab-view/{consultation_id}', [App\Http\Controllers\LabController::class,'lab_view'])->name('lab_view');
+Route::get('/lab-clear/{consultation_id}', [App\Http\Controllers\LabController::class,'lab_clear'])->name('lab_clear');
+Route::get('/lab-resend/{exam_id?}/{consultaion_id?}', [App\Http\Controllers\LabController::class,'lab_resend'])->name('lab_resend');
+Route::post('/lab-comment/{exam_id}', [App\Http\Controllers\LabController::class,'lab_comment'])->name('lab_comment');
+Route::get('/lab-update/{exam_id?}/{consultation_id?}/{test_id}', [App\Http\Controllers\LabController::class, 'lab_update'])->name('lab_update');
+Route::get('/lab-delete/{exam_id?}/{consultation_id}/{test_id}', [App\Http\Controllers\LabController::class, 'lab_delete'])->name('lab_delete');
 Route::post('/submit-report/{consultation_id}', [App\Http\Controllers\LabController::class, 'submit_report'])->name('submit_report');
 });
