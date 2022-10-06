@@ -120,9 +120,11 @@ class PatientController extends Controller
 
     public function consultant_to(Request $request,$patient_id)
     {
+        $doctor_department_id=Doctor::where('id',$request->input('doctor_id'))->first()->department_id;
         $data=[
           'patient_id'=>$patient_id,
-          'consulted_by'=>$request->input('doctor_id')
+          'consulted_by'=>$request->input('doctor_id'),
+          'department_id'=>$doctor_department_id
         ];
         $update_data=[
             'is_consulted'=>1

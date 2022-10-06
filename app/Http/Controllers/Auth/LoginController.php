@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Illuminate\Support\Facades\Auth; 
 class LoginController extends Controller
 {
     /*
@@ -26,7 +26,22 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+   // protected $redirectTo = RouteServiceProvider::HOME;
+   protected function authenticated()
+   {
+       if(Auth::user()->role_as == 'administration') //1 = Admin Login
+       {
+           return redirect(route('home'));
+       }
+       elseif(Auth::user()->role_as == 'doctor') // Normal or Default User Login
+       {
+           return redirect(route('consultations'));
+       }
+       elseif(Auth::user()->role_as == 'lab_tecknician') // Normal or Default User Login
+       {
+           return redirect(route('lab'));
+       }
+   }
 
     /**
      * Create a new controller instance.

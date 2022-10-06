@@ -23,7 +23,10 @@ class User extends Authenticatable
         'password',
         'role_as',
     ];
-
+    public function doctor()  //making relationship
+    {
+         return $this->belongsTo(Doctor::class,'id','user_id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

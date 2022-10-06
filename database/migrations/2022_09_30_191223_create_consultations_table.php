@@ -18,6 +18,7 @@ class CreateConsultationsTable extends Migration
 
             $table->integer('patient_id'); //from Patient
             $table->integer('consulted_by')->comment('Doctor Id'); 
+            $table->integer('department_id'); 
 
             $table->longText('problem_details')->nullable();  
             $table->text('problem_duration')->nullable();  

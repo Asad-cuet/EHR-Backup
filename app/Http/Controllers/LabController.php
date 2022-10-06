@@ -242,18 +242,7 @@ class LabController extends Controller
         return redirect()->back()->with('status', "Commented in a report");
     }
 
-    public function lab_resend($exam_id,$consultation_id)
-    {
-        $data=[
-            'is_resent'=>1
-        ];
-        Exam::where('id',$exam_id)->update($data);
-        $data=[
-        'is_on_exam'=>1
-        ];
-        consultation::where('id',$consultation_id)->update($data);
-        return redirect(route('consultations'))->with('status', "A patient sent to Lab");
-    }
+
 
 }
 

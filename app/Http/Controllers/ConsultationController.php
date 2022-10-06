@@ -1,18 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth; 
 use Illuminate\Http\Request;
 use App\Models\consultation;
 use App\Models\Prescribe;
 use App\Models\Test;
 use App\Models\Exam;
+use App\Models\Comment;
 use App\Models\ClinicalHistory;
 class ConsultationController extends Controller
 {
     public function consultations()
     {
-        $consultations=consultation::where('is_on_exam',0)->where('is_examed',0)->orderBy('updated_at','desc')->get();
+
+        $consultations=consultation::where('is_on_exam',0)->where('consulted_by',Auth::user()->doctor->id)->orderBy('updated_at','desc')->get();
         $consultations=collect($consultations)->map(function($item,$key)
         {
             $patient_name=$item->patient->pre_name.' '.$item->patient->fname;
@@ -35,8 +37,14 @@ class ConsultationController extends Controller
         $consultation=consultation::where('id',$id)->first();
         $test=Exam::where('consultation_id',$id)->get();
         $history=ClinicalHistory::where('patient_id',$consultation->patient_id)->first();
-        
-        return view('pages.consultation.consultation_status',['consultation'=>$consultation,'test'=>$test,'history'=>$history]);
+        $comments=Comment::where('consultation_id',$id)->get();
+        $object=[
+            'consultation'=>$consultation,
+            'test'=>$test,
+            'history'=>$history,
+            'comments'=>$comments
+        ];
+        return view('pages.consultation.consultation_status',$object);
 
     }
 
@@ -47,6 +55,12 @@ class ConsultationController extends Controller
     }
     public function submit_problem(Request $request,$consultation_id)
     {
+        if(!consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
+        {
+            return back()->with('danger',"Access Denied");
+        }
+
+
         $data=[
             'problem_details'=>$request->input('problem_details'),
             'problem_duration'=>$request->input('problem_duration')
@@ -63,6 +77,12 @@ class ConsultationController extends Controller
     }
     public function submit_exam(Request $request,$consultation_id)
     {
+        if(!consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
+        {
+            return back()->with('danger',"Access Denied");
+        }
+
+
         $test_id=$request->input('test');
         $t_num=count($test_id);
 
@@ -95,6 +115,13 @@ class ConsultationController extends Controller
 
     public function submit_prescribe(Request $request,$consultation_id)
     {
+
+        if(!consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
+        {
+            return back()->with('danger',"Access Denied");
+        }
+
+
         $title=$request->input('title');
         $comment=$request->input('comment');
         $m_num=count($title);
@@ -120,6 +147,25 @@ class ConsultationController extends Controller
             return redirect(route('consultations'))->with('status','Prescribe Added Successfully');
         }
         
+    }
+
+    public function lab_resend($exam_id,$consultation_id)
+    {
+        if(!consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
+        {
+            return back()->with('danger',"You can only take this action of your patient");
+        }
+
+        
+        $data=[
+            'is_resent'=>1
+        ];
+        Exam::where('id',$exam_id)->update($data);
+        $data=[
+        'is_on_exam'=>1
+        ];
+        consultation::where('id',$consultation_id)->update($data);
+        return redirect(route('consultations'))->with('status', "A patient sent to Lab");
     }
 
 
