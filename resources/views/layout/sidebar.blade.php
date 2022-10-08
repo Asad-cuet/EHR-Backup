@@ -13,7 +13,11 @@
                       @if(Auth::user()->role_as=='administration')
                             <a class="nav-link @if(Request::is('register')) active @endif" href="{{url('/register')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-registered"></i></div>
-                                Register
+                                Register User
+                            </a>
+                            <a class="nav-link @if(Request::is('all-user')) active @endif" href="{{url('/all-user')}}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                All User
                             </a>
 
                             <a class="nav-link collapsed @if(Request::is('patients') || Request::is('patient-form')) active @endif" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">

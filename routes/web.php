@@ -42,7 +42,8 @@ Route::post('/update-patient/{id}', [App\Http\Controllers\PatientController::cla
 Route::get('/consultant/{id}', [App\Http\Controllers\PatientController::class, 'consultant'])->name('consultant');
 Route::post('/consultant-to/{patient_id}', [App\Http\Controllers\PatientController::class, 'consultant_to'])->name('consultant_to');
 
-
+Route::get('/all-user', [App\Http\Controllers\AdministrationController::class, 'all_user'])->name('all_user');
+Route::get('/delete-user/{user_id}', [App\Http\Controllers\AdministrationController::class, 'delete_user'])->name('delete_user');
 
 Route::get('/doctors', [App\Http\Controllers\DoctorController::class, 'doctors'])->name('doctors');
 Route::get('/doctor-form', [App\Http\Controllers\DoctorController::class, 'doctor_form'])->name('doctor_form');
