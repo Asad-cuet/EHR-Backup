@@ -50,8 +50,8 @@
             <li class="list-group-item"><b>Pain On Scale : </b>{{$history->pain_on_scale}} </li>
              <br>
             <li class="list-group-item bg-secondary text-white" aria-current="true">Consulting By</li>
-            <li class="list-group-item"><b>Name : </b>{{$consultation->doctor->name}} </li>
-            <li class="list-group-item"><b>Subject : </b>{{$consultation->doctor->subject}} </li>
+            <li class="list-group-item"><b>Name : </b>{{$consultation->doctor->user->name}} </li>
+            <li class="list-group-item"><b>Department : </b>{{$consultation->doctor->department->name}} </li>
       </ul>
       </div>
 </div>

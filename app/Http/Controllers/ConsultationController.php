@@ -15,6 +15,7 @@ class ConsultationController extends Controller
     {
 
         $consultations=consultation::where('is_on_exam',0)->where('consulted_by',Auth::user()->doctor->id)->orderBy('updated_at','desc')->get();
+        $con_quantity_on_lab=consultation::where('is_on_exam',1)->where('consulted_by',Auth::user()->doctor->id)->count();
         $consultations=collect($consultations)->map(function($item,$key)
         {
             $patient_name=$item->patient->pre_name.' '.$item->patient->fname;
@@ -24,11 +25,33 @@ class ConsultationController extends Controller
                 'consulted_by'=>$item['consulted_by'],
                 'patient_name'=>$patient_name,
                 'patient_phone'=>$item->patient->phone,
-                'doctor_name'=>$item->doctor->user->name,
+                'doctor_name'=>$item->doctor->user->name
                  ];
         });
         
-        return view('pages.consultation.consultation_list',['consultations'=>$consultations]);
+        return view('pages.consultation.consultation_list',['consultations'=>$consultations,'con_quantity_on_lab'=>$con_quantity_on_lab]);
+
+    }
+
+
+    public function consultations_on_lab()
+    {
+
+        $consultations=consultation::where('is_on_exam',1)->where('consulted_by',Auth::user()->doctor->id)->orderBy('updated_at','desc')->get();
+        $consultations=collect($consultations)->map(function($item,$key)
+        {
+            $patient_name=$item->patient->pre_name.' '.$item->patient->fname;
+            return [
+                'id'=>$item['id'],
+                'patient_id'=>$item['patient_id'],
+                'consulted_by'=>$item['consulted_by'],
+                'patient_name'=>$patient_name,
+                'patient_phone'=>$item->patient->phone,
+                'doctor_name'=>$item->doctor->user->name
+                 ];
+        });
+        
+        return view('pages.consultation.consultation_on_lab',['consultations'=>$consultations]);
 
     }
 
@@ -209,4 +232,22 @@ class ConsultationController extends Controller
     }
 
 
+
+
+    public function exam_result($consultation_id)
+    {
+        $result=consultation::where('id',$consultation_id)->first()->exam_result;
+        return view('pages.consultation.action.exam_result',['consultation_id'=>$consultation_id,'result'=>$result]);
+    }
+
+
+    public function submit_exam_result(Request $request,$consultation_id)
+    {
+       $data=[
+        'exam_result'=>$request->input('exam_result')
+       ];
+       consultation::where('id',$consultation_id)->update($data);
+       return redirect(route('consultations'))->with('status',"Exam result submitted");
+
+    }
 }

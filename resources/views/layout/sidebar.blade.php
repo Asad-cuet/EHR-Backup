@@ -77,6 +77,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Dotcor's Details
                             </a>
+                            <a class="nav-link @if(Request::is('consultations-on-lab')) active @endif" href="{{url('consultations-on-lab')}}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Your Patient on Laboratory
+                            </a>
                       @endif
 
 

@@ -18,8 +18,8 @@
             <li class="list-group-item"><b>Guardian Phone : </b>{{$consultation->patient->guardian_phone}} </li>
 
             <li class="list-group-item bg-secondary text-white" aria-current="true">Consulting By</li>
-            <li class="list-group-item"><b>Name : </b>{{$consultation->doctor->name}} </li>
-            <li class="list-group-item"><b>Subject : </b>{{$consultation->doctor->subject}} </li>
+            <li class="list-group-item"><b>Name : </b>{{$consultation->doctor->user->name}} </li>
+            <li class="list-group-item"><b>Department : </b>{{$consultation->doctor->department->name}} </li>
       </ul>
       </div>
       <div class="col">
@@ -27,7 +27,7 @@
 
                   <li class="list-group-item bg-dark text-white" aria-current="true">History</li>
                   <li class="list-group-item"><b>Primary Admitting Diagnosis : </b>{{$history->primary_admitting_diagnosis}} </li>
-                  <li class="list-group-item"><b>Permanant history : </b>{{$history->permanant_history}} </li>
+                  <li class="list-group-item"><b>Permanant History : </b>{{$history->permanant_history}} </li>
                   <li class="list-group-item"><b>Previous Medical History : </b>{{$history->previous_medical_history}} </li>
                   <li class="list-group-item"><b>Surgical History : </b>{{$history->surgical_history}} </li>
                   <li class="list-group-item"><b>Smoker : </b>@if($history->smoker==1) Yes @else No @endif </li>
@@ -114,7 +114,7 @@
       @endforeach
 
       <li class="list-group-item bg-success text-white" aria-current="true">Final Result</li>
-      <li class="list-group-item">Normal </li>
+      <li class="list-group-item">{{$consultation->exam_result}} </li>
 </ul>
 
 <br>
