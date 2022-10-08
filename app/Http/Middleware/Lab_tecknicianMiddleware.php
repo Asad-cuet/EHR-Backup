@@ -25,7 +25,7 @@ class Lab_tecknicianMiddleware
             }
             else
             {
-                return redirect('/home')->with('status','Access Denied! As you are not Lab Tecknician');
+                return redirect('/home')->with('danger','Access Denied! As you are not Lab Tecknician');
             }
         }
         else

@@ -20,6 +20,7 @@ class CreateExamsTable extends Migration
             $table->text('report')->nullable();
             $table->text('comment')->nullable();
             $table->integer('is_resent')->default(0);
+            $table->integer('is_once_sent_to_consult')->default(0);
             $table->timestamps();
         });
     }

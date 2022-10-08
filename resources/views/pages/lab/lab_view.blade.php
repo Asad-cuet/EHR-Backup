@@ -20,7 +20,8 @@ label {
             <ul class="list-group">
                   
                   <li class="list-group-item active" aria-current="true">Patient Details</li>  
-                  <li class="list-group-item" aria-current="true">Name: {{$lab->patient->name}}</li>  
+                  <li class="list-group-item" aria-current="true">ID: {{$lab->patient->id}}</li>  
+                  <li class="list-group-item" aria-current="true">Name: {{$lab->patient->pre_name}} {{$lab->patient->fname}} {{$lab->patient->lname}}</li>  
                   <li class="list-group-item" aria-current="true">Gender: {{$lab->patient->gender}}</li>  
                   <li class="list-group-item" aria-current="true">Age: {{$lab->patient->age}}</li>  
                   <li class="list-group-item" aria-current="true">Height: {{$lab->patient->height}} Fit</li>  
@@ -66,7 +67,7 @@ label {
                                     <b>{{$item->test->test_name}}</b>
                                     @if($item->report!=0)
                                           <a href="{{asset('assets/report/'.$item->report)}}" class="btn btn-info badge" target="_blank">view</a>
-                                          @if(!$item->is_resent)
+                                          @if(!$item->is_resent && !$item->is_once_sent_to_consult)
                                                 <a href="{{url('/lab-delete/'.$item->id.'/'.$item->consultation_id.'/'.$item->test_id)}}" onclick="return confirm('Are you sure? You want to delete?')" class="btn btn-danger badge">delete</a>
                                           @endif
                                           @if($item->is_resent)
@@ -88,6 +89,7 @@ label {
                                           <div class="badge bg-danger">Didn't Submitted Yet</div>
                                     @endif
                               </div>
+                              @if($item->is_resent)
                               <div class="col">
                                     @if($item->report!=0)
                                           <b>Update Report</b>
@@ -102,6 +104,7 @@ label {
 
                                     @endif
                               </div>
+                              @endif
                               
                         </div>          
                         </li>                     

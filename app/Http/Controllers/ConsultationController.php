@@ -20,8 +20,8 @@ class ConsultationController extends Controller
             $patient_name=$item->patient->pre_name.' '.$item->patient->fname;
             return [
                 'id'=>$item['id'],
-                'patient_id'=>$item['id'],
-                'consulted_by'=>$item['id'],
+                'patient_id'=>$item['patient_id'],
+                'consulted_by'=>$item['consulted_by'],
                 'patient_name'=>$patient_name,
                 'patient_phone'=>$item->patient->phone,
                 'doctor_name'=>$item->doctor->user->name,
@@ -153,7 +153,7 @@ class ConsultationController extends Controller
     {
         if(!consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
         {
-            return back()->with('danger',"You can only take this action of your patient");
+            return back()->with('danger',"You can only take this action to your patient");
         }
 
         
@@ -166,6 +166,46 @@ class ConsultationController extends Controller
         ];
         consultation::where('id',$consultation_id)->update($data);
         return redirect(route('consultations'))->with('status', "A patient sent to Lab");
+    }
+
+
+    public function history($patient_id)
+    {
+        if(!ClinicalHistory::where('patient_id',$patient_id)->exists())
+        {
+             return back()->with('danger',"This Patient doesn't exist in Clinical-History Table");
+        }
+
+        $history=ClinicalHistory::where('patient_id',$patient_id)->first();
+        return view('pages.consultation.action.history',['patient_id'=>$patient_id,'history'=>$history]);
+    }
+
+    
+    public function submit_history(Request $request,$patient_id)
+    {
+        if(!consultation::where('patient_id',$patient_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
+        {
+            return back()->with('danger',"Access Denied");
+        }
+
+
+
+
+        $data=[
+            'primary_admitting_diagnosis'=>$request->input('primary_admitting_diagnosis'),
+            'permanant_history'=>$request->input('permanant_history'),
+            'previous_medical_history'=>$request->input('previous_medical_history'),
+            'surgical_history'=>$request->input('surgical_history'),
+            'smoker'=>$request->input('smoker'),
+            'diabetes'=>$request->input('diabetes'),
+            'heart_rate'=>$request->input('heart_rate'),
+            'bp_systole'=>$request->input('bp_systole'),
+            'bp_diastole'=>$request->input('bp_diastole'),
+            'oxygen_seturation'=>$request->input('oxygen_seturation'),
+            'pain_on_scale'=>$request->input('pain_on_scale')
+        ];
+        ClinicalHistory::where('patient_id',$patient_id)->update($data);
+        return redirect(route('consultations'))->with('status','History Submited Successfully');
     }
 
 

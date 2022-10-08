@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\consultation;
 use App\Models\Test;
 use App\Models\Exam;
+use App\Models\Comment;
 use Illuminate\Support\Facades\File;
 
 class LabController extends Controller
@@ -140,6 +141,12 @@ class LabController extends Controller
 
     public function lab_update(Request $request,$exam_id)
     {
+        if(Exam::where('id',$exam_id)->first()->is_resent==0)
+        {
+            return back()->with('danger',"This report didn't Send back by doctor");
+        }
+
+
         if(empty($request->file('updated_report')))
         {
             return back()->with('danger','Cannot Submit Empty');
@@ -184,6 +191,15 @@ class LabController extends Controller
     }
     public function lab_delete($exam_id,$consultation_id,$test_id)
     {
+        // if(Comment::where('consultation_id',$consultation_id)->exists())
+        // {
+        //     return back()->with('danger',"This post is on Doctor's comment. You can't delete this report.");
+        // }
+        if(Exam::where('id',$exam_id)->where('is_once_sent_to_consult',1)->exists())
+        {
+            return back()->with('danger',"Once the report submitted to Consultation, you can't delete report anymore");
+        }
+
         if(Exam::where('consultation_id',$consultation_id)->where('test_id',$test_id)->count()>1)  //multiple report uploaded
         {
                 $exam=Exam::where('id',$exam_id)->first();
@@ -220,10 +236,19 @@ class LabController extends Controller
 
     public function lab_clear($consultation_id)
     {
+        if(Exam::where('consultation_id',$consultation_id)->where('is_resent',1)->exists())
+        {
+            return back()->with('danger',"Can not send without updating the Re-Sent test");
+        }
+
         $data=[
         'is_on_exam'=>0
         ];
         consultation::where('id',$consultation_id)->update($data);
+        $data=[
+            'is_once_sent_to_consult'=>1
+        ];
+        Exam::where('consultation_id',$consultation_id)->update($data);
         return redirect(route('lab'))->with('status', "A patient's sent to consultation");
     }
 

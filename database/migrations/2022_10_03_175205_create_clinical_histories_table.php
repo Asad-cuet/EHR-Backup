@@ -27,7 +27,7 @@ class CreateClinicalHistoriesTable extends Migration
             $table->string('bp_systole')->nullable();
             $table->string('bp_diastole')->nullable();
             $table->string('oxygen_seturation')->nullable();
-            $table->string('pain_on_scale')->nullable();
+            $table->integer('pain_on_scale')->nullable();
             $table->timestamps();
         });
     }

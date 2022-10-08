@@ -25,7 +25,7 @@ class AdministrationMiddleware
             }
             else
             {
-                return redirect('/home')->with('status','Access Denied! As you are not Administration');
+                return redirect('/home')->with('danger','Access Denied! As you are not Administration');
             }
         }
         else

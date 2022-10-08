@@ -73,6 +73,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Other's Consultation
                             </a>
+                            <a class="nav-link @if(Request::is('all-doctors')) active @endif" href="{{url('all-doctors')}}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Dotcor's Details
+                            </a>
                       @endif
 
 

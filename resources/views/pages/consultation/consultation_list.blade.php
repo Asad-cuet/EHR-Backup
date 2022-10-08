@@ -23,7 +23,7 @@
          <td>{{$item['doctor_name']}}</td>
          <td>
             <a href="{{url('/consultation-status/'.$item['id'])}}" class="btn btn-info">Status</a>
-            <a href="{{url('/problem/'.$item['id'])}}" class="btn btn-dark">History</a>
+            <a href="{{url('/history/'.$item['patient_id'])}}" class="btn btn-dark">History</a>
             <a href="{{url('/problem/'.$item['id'])}}" class="btn btn-danger">Problem</a>
 
             <a href="{{url('/prescribe/'.$item['id'])}}" class="btn btn-warning">Prescribe</a>

@@ -25,7 +25,7 @@ class DoctorMiddleware
             }
             else
             {
-                return redirect('/home')->with('status','Access Denied! As you are not Doctor');
+                return redirect('/home')->with('danger','Access Denied! As you are not Doctor');
             }
         }
         else

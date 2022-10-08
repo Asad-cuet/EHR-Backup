@@ -64,10 +64,16 @@ Route::post('/add-test', [App\Http\Controllers\TestController::class, 'add_test'
 Route::middleware(['auth','isDoctor'])->group(function () {
 Route::get('/consultations', [App\Http\Controllers\ConsultationController::class, 'consultations'])->name('consultations');
 Route::get('/consultation-status/{id}', [App\Http\Controllers\ConsultationController::class, 'consultation_status'])->name('consultation_status');
+
 Route::get('/problem/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'problem'])->name('problem');
 Route::post('/submit-problem/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'submit_problem'])->name('submit_problem');
+
 Route::get('/prescribe/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'prescribe'])->name('prescribe');
 Route::post('/submit-prescribe/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'submit_prescribe'])->name('submit_prescribe');
+
+Route::get('/history/{patient_id}', [App\Http\Controllers\ConsultationController::class, 'history'])->name('history');
+Route::post('/submit-history/{patient_id}', [App\Http\Controllers\ConsultationController::class, 'submit_history'])->name('submit_history');
+
 
 
 Route::get('/exam/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'exam'])->name('exam');
@@ -80,6 +86,9 @@ Route::get('/lab-resend/{exam_id?}/{consultaion_id?}', [App\Http\Controllers\Con
 Route::get('/consultations-others', [App\Http\Controllers\OthersConsultationController::class, 'consultations_others'])->name('consultations_others');
 Route::post('/doctor-comment/{exam_id?}/{consultation_id?}', [App\Http\Controllers\CommentController::class, 'doctor_comment'])->name('doctor_comment');
 Route::get('/commented-doctor-view/{doctor_id?}', [App\Http\Controllers\CommentController::class, 'doctor_view'])->name('doctor_view');
+
+Route::get('/all-doctors', [App\Http\Controllers\DoctorController::class, 'all_doctors'])->name('all_doctors');
+Route::get('/doctor-details/{id?}', [App\Http\Controllers\DoctorController::class, 'doctor_details'])->name('doctor_details');
 
 });
 

@@ -87,6 +87,7 @@ class DoctorController extends Controller
     {
         $departments=Department::orderBy('id','desc')->get();
         $doctor=Doctor::where('id',$id)->first();
+        $doctor->user->password=null;
         return view('pages.doctor.doctor_view',['doctor'=>$doctor,'departments'=>$departments]);
 
     }
@@ -122,7 +123,6 @@ class DoctorController extends Controller
         if($user)
         {
             return redirect(route('doctors'))->with('status',"Doctor's details Updated Successfully");
-        
         }
         else
         {
@@ -131,4 +131,32 @@ class DoctorController extends Controller
     }
 
     }
+
+
+
+    public function all_doctors()
+    {
+        $doctors=Doctor::orderBy('id','desc')->get();
+        $doctors=collect($doctors)->map(function($item,$key)
+        {
+            return [
+                'id'=>$item['id'],
+                'name'=>$item->user->name,
+                'email'=>$item->user->email,
+                'phone'=>$item['phone'],
+                'department_name'=>$item->department->name,
+                'qualification'=>$item->department->name,
+                'specialization'=>$item->department->name
+                 ];
+        });
+        return view('pages.doctor.all_doctors',['doctors'=>$doctors]);
+    }
+
+    public function doctor_details($id)
+    {
+        $doctor=Doctor::where('id',$id)->first();
+        $doctor->user->password=null;
+        return view('pages.doctor.doctor_details',['doctor'=>$doctor]);
+    }
+
 }

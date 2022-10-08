@@ -30,13 +30,13 @@
                   <li class="list-group-item"><b>Permanant history : </b>{{$history->permanant_history}} </li>
                   <li class="list-group-item"><b>Previous Medical History : </b>{{$history->previous_medical_history}} </li>
                   <li class="list-group-item"><b>Surgical History : </b>{{$history->surgical_history}} </li>
-                  <li class="list-group-item"><b>Smoker : </b>{{$history->smoker}} </li>
-                  <li class="list-group-item"><b>Diabetes : </b>{{$history->diabetes}} </li>
+                  <li class="list-group-item"><b>Smoker : </b>@if($history->smoker==1) Yes @else No @endif </li>
+                  <li class="list-group-item"><b>Diabetes : </b>@if($history->diabetes==1) Yes @else No @endif </li>
                   <li class="list-group-item"><b>Heart Rate : </b>{{$history->heart_rate}} </li>
                   <li class="list-group-item"><b>BP Systole : </b>{{$history->bp_systole}} </li>
                   <li class="list-group-item"><b>BP Diastole : </b>{{$history->bp_diastole}} </li>
                   <li class="list-group-item"><b>Oxygen Seturation : </b>{{$history->oxygen_seturation}} </li>
-                  <li class="list-group-item"><b>Pain On Scale : </b>{{$history->pain_on_scale}} </li>
+                  <li class="list-group-item"><b>Pain On Scale : </b>@if($history->pain_on_scale==1) Yes @else No @endif </li>
             </ul>
       </div>
 </div>
