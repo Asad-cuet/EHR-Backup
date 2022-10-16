@@ -7,6 +7,7 @@ use App\Models\consultation;
 use App\Models\Prescribe;
 use App\Models\Test;
 use App\Models\Exam;
+use App\Models\Patient;
 use App\Models\Comment;
 use App\Models\ClinicalHistory;
 class ConsultationController extends Controller
@@ -14,7 +15,7 @@ class ConsultationController extends Controller
     public function consultations()
     {
 
-        $consultations=consultation::where('is_on_exam',0)->where('consulted_by',Auth::user()->doctor->id)->orderBy('updated_at','desc')->get();
+        $consultations=consultation::where('is_on_exam',0)->where('is_complete',0)->where('consulted_by',Auth::user()->doctor->id)->orderBy('updated_at','desc')->get();
         $con_quantity_on_lab=consultation::where('is_on_exam',1)->where('consulted_by',Auth::user()->doctor->id)->count();
         $consultations=collect($consultations)->map(function($item,$key)
         {
@@ -25,7 +26,7 @@ class ConsultationController extends Controller
                 'consulted_by'=>$item['consulted_by'],
                 'patient_name'=>$patient_name,
                 'patient_phone'=>$item->patient->phone,
-                'doctor_name'=>$item->doctor->user->name
+                'is_examed'=>$item->is_examed
                  ];
         });
         
@@ -123,7 +124,12 @@ class ConsultationController extends Controller
         $consult->is_on_exam=1;
         $consult->update();
 
-            return redirect(route('consultations'))->with('status','Exam Added Successfully');
+        $data=[
+            'is_examed'=>1
+        ];
+        consultation::where('id',$consultation_id)->update($data);
+
+        return redirect(route('consultations'))->with('status','Exam Added Successfully');
     }
 
 
@@ -179,6 +185,10 @@ class ConsultationController extends Controller
             return back()->with('danger',"You can only take this action to your patient");
         }
 
+        if(consultation::where('id',$consultation_id)->where('is_complete',1)->exists())
+        {
+            return back()->with('danger',"This patient's consultation completed. You can't take this action anymore.");
+        }
         
         $data=[
             'is_resent'=>1
@@ -248,6 +258,47 @@ class ConsultationController extends Controller
        ];
        consultation::where('id',$consultation_id)->update($data);
        return redirect(route('consultations'))->with('status',"Exam result submitted");
+
+    }
+
+
+    public function consultant_complete($consultation_id)
+    {
+       if(consultation::where('id',$consultation_id)
+       ->where('is_on_exam',1)
+       ->where('consulted_by',Auth::user()->doctor->id)
+       ->exists()) 
+       {
+        return back()->with('danger',"This patient is on exam.During exam,can't take this action.");
+       }
+
+
+
+       if(consultation::where('id',$consultation_id)->where('exam_result','=',null)->exists())
+       {
+        return back()->with('danger',"Can't take this action without giving the final statement.");
+       }
+       
+       if(consultation::where('id',$consultation_id)
+       ->where('consulted_by',Auth::user()->doctor->id)
+       ->exists())
+       {
+            $data=[
+                'is_complete'=>1
+            ];
+            consultation::where('id',$consultation_id)->update($data);
+            $patient_id=consultation::where('id',$consultation_id)->first()->patient_id;
+            $data=[
+                'is_cleared'=>1
+            ];
+            Patient::where('id',$patient_id)->update($data);   
+            return redirect(route('consultations'))->with('status',"The patient consultation is completed.This patient details is available in Consultation History");
+        }
+ 
+  
+           
+   
+
 
     }
 }

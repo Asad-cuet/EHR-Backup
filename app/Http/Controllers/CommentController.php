@@ -43,6 +43,8 @@ class CommentController extends Controller
     public function doctor_view($doctor_id)
     {
        $doctor=Doctor::where('id',$doctor_id)->first();
+       $doctor->password='';
+       $doctor->user->password='';
        return view('pages.comment.doctor_view',['doctor'=>$doctor]);
     }
 }

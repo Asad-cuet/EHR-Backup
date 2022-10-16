@@ -3,6 +3,18 @@
 @section('title','Patients')
 @section('content')
 
+@if(!$consultation->exam_result)
+<div class="alert alert-danger">
+  You didn't give your <strong>Final Statement</strong> yet.
+</div>
+
+@else
+<div class="alert alert-info">
+You gave your <strong>Final Statement</strong> 
+</div>
+@endif
+
+
 
 <div class="row">
       <div class="col">
@@ -11,7 +23,7 @@
             <li class="list-group-item"><b>Name : </b>{{$consultation->patient->pre_name}} {{$consultation->patient->fname}} {{$consultation->patient->lname}} </li>
             <li class="list-group-item"><b>Gender : </b>{{$consultation->patient->gender}} </li>
             <li class="list-group-item"><b>Age : </b>{{$consultation->patient->age}} </li>
-            <li class="list-group-item"><b>Height : </b>{{$consultation->patient->height}} Fit</li>
+            <li class="list-group-item"><b>Height : </b>{{$consultation->patient->height}} (Fit.inchi)</li>
             <li class="list-group-item"><b>Wight : </b>{{$consultation->patient->weight}} Kg</li>
             <li class="list-group-item"><b>Phone : </b>{{$consultation->patient->phone}} </li>
             <li class="list-group-item"><b>Address : </b>{{$consultation->patient->address}} </li>
@@ -62,47 +74,63 @@
                   <h5>{{$item->test->test_name}} : </h5>
                   @if(!empty($item->report))
                         <a href="{{asset('assets/report/'.$item->report)}}" class="badge btn btn-dark" target="_blank" rel="noopener noreferrer">View</a>  
+                        @if($item->is_resent==0 && $item->is_once_sent_to_consult==1)
                         <a href="{{url('/lab-resend/'.$item->id.'/'.$item->consultation_id)}}" onclick="return confirm('Are You Sure?')" class="badge btn btn-danger" rel="noopener noreferrer">Re Send to Lab</a> 
-                        
+                        @endif
                         
                         {{-- lab comment section start --}}
                         <div class="mt-3">
-                              @if($item->comment)
-                              <b>Comment From Laboratory:</b>{{$item->comment}}
+                              @if($item->comment_from_lab)
+                              <b>Comment From Laboratory: </b>{{$item->comment_from_lab}}
                               @endif
                         </div>
+                        {{-- doctors to lab comment section start --}}
+                        @if($consultation->is_on_exam)
+                              @if($item->comment_from_doctor)
+                              <b>Comment From You: </b>{{$item->comment_from_doctor}}
+                              @endif
+                              <div class="mt-3">
+                                    <form action="{{url('/doctor-comment-to-lab/'.$item->id)}}" method="POST">
+                                          @csrf
+                                          <input type="text" name="comment_from_doctor_to_lab" placeholder="Write a comment if any">
+                                          <button type="submit" class="btn btn-warning badge">@if($item->comment_from_doctor)Update Comment @else Comment @endif</button>
+                                    </form>
+                              </div>
+                        @endif
                         {{-- doctors section start --}}
                         <div class="">
-                              @if(count($comments)>0)
-                                  @foreach ($comments as $com)
-                                  @if( $item->id==$com->exam_id)
-                                    <div class="mt-1 mb-1">
-                                          {{$com->comment}} by 
-                                          @if($com->doctor->user->id==Auth::user()->id) You 
-                                          @else 
-                                          <a href="{{url('/commented-doctor-view/'.$com->comment_by_doctor_id)}}">{{$com->doctor->user->name}} </a>
-                                          @endif
-                                    </div>   
-                                    @endif                          
-                                  @endforeach
+                              @if(!$consultation->is_on_exam)
+                                    @if(count($comments)>0)
+                                    
+                                    @foreach ($comments as $com)
+                                    @if( $item->id==$com->exam_id)
+                                          <div class="mt-1 mb-1">
+                                                {{$com->comment}} by 
+                                                @if($com->doctor->user->id==Auth::user()->id) You 
+                                                @else 
+                                                <a href="{{url('/commented-doctor-view/'.$com->comment_by_doctor_id)}}">{{$com->doctor->user->name}} </a>
+                                                @endif
+                                          </div>   
+                                          @endif                          
+                                    @endforeach
 
+
+                                    @endif    
+
+                                    <div class="row">
+                                          <div class="col-8">
+                                                <form action="{{url('/doctor-comment/'.$item->id.'/'.$item->consultation_id)}}" method="post">
+                                                      @csrf
+                                                      <input type="text" name="comment" placeholder="This comment is readable only for doctor" class="form-control">
+                                                      
+                                          </div>
+                                          <div class="col-4">
+                                                      <button type="submit" class="btn btn-secondary">Comment</button>
+                                                </form>
+                                          </div>
+                                    </div>
 
                               @endif    
-
-                              <div class="row">
-                                    <div class="col-8">
-                                          <form action="{{url('/doctor-comment/'.$item->id.'/'.$item->consultation_id)}}" method="post">
-                                                @csrf
-                                                <input type="text" name="comment" placeholder="Left a comment.." class="form-control">
-                                                
-                                    </div>
-                                    <div class="col-4">
-                                                <button type="submit" class="btn btn-secondary">Comment</button>
-                                          </form>
-                                    </div>
-                              </div>
-
-
                         </div>
 
                   @else
@@ -113,8 +141,8 @@
             </li>
       @endforeach
 
-      <li class="list-group-item bg-success text-white" aria-current="true">Final Result</li>
-      <li class="list-group-item">{{$consultation->exam_result}} </li>
+      <li class="list-group-item bg-success text-white" aria-current="true">Doctor's Final Statement</li>
+      <li class="list-group-item">@if($consultation->exam_result){{$consultation->exam_result}} @else Didn't submitted yet @endif</li>
 </ul>
 
 <br>

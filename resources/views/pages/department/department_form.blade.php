@@ -5,14 +5,14 @@
 
 
 <div class="" style="width:100%;max-width:700px;margin:auto">
-<h3 class="text-center">Add Test</h3>
+<h3 class="text-center">Add Department</h3>
 <form method="POST" action="{{url('/add-department')}}">
       @csrf
 
 
       <div class="row">
             <div class="col">
-              <input required type="text" name="name" class="form-control" placeholder="Write Name.." aria-label="First name">
+              <input required type="text" name="name" class="form-control" placeholder="Department Name.." aria-label="First name">
             </div>
       </div>
       <br>

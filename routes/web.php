@@ -17,6 +17,26 @@ Route::get('/', function () {
     return redirect('login');
 });
 
+//when there is 0 user in database, this url will create a user. It can be use just for one timr
+Route::get('/create', function () {
+  if(App\Models\User::count()==0)
+  {
+    $pass=12345678;
+    $data=[
+      'name'=>'Administration',
+      'email'=>'ad@gmail.com',
+      'rolse_as'=>'administration',
+      'password'=>Hash::make($pass)
+    ];
+    App\Models\User::create($data);
+    return "A user created. Email: ad@gmail.com and password: ".$pass.".<br>This way can be use only One time at the begining of the website.";
+  }
+  else
+  {
+    return "Sorry! <br>This way is available just for 1 time";
+  }
+});
+
 Auth::routes([
     'register' => true, // Registration Routes...
   ]);
@@ -69,6 +89,10 @@ Route::get('/consultations', [App\Http\Controllers\ConsultationController::class
 Route::get('/consultations-on-lab', [App\Http\Controllers\ConsultationController::class, 'consultations_on_lab'])->name('consultations_on_lab');
 Route::get('/consultation-status/{id}', [App\Http\Controllers\ConsultationController::class, 'consultation_status'])->name('consultation_status');
 
+
+Route::get('/consultant-complete/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'consultant_complete'])->name('consultant_complete');
+Route::get('/consultation-history', [App\Http\Controllers\OthersConsultationController::class, 'patient_history'])->name('patient_history');
+
 Route::get('/problem/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'problem'])->name('problem');
 Route::post('/submit-problem/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'submit_problem'])->name('submit_problem');
 
@@ -96,6 +120,9 @@ Route::get('/commented-doctor-view/{doctor_id?}', [App\Http\Controllers\CommentC
 
 Route::get('/all-doctors', [App\Http\Controllers\DoctorController::class, 'all_doctors'])->name('all_doctors');
 Route::get('/doctor-details/{id?}', [App\Http\Controllers\DoctorController::class, 'doctor_details'])->name('doctor_details');
+
+
+Route::post('doctor-comment-to-lab/{exam_id}', [App\Http\Controllers\LabController::class,'doctor_comment_to_lab'])->name('doctor_comment_to_lab');
 
 });
 

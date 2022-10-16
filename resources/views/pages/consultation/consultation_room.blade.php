@@ -10,7 +10,7 @@
 <form method="POST" action="{{url('/consultant-to/'.$patient_id)}}">
       @csrf
       <select class="form-select" name="doctor_id" aria-label="Default select example">
-            <option selected>Select Dector for consultation</option>
+            <option value="0" selected>Select Dector for consultation</option>
             @foreach ($doctors as $item)
                    <option value="{{$item['doctor_id']}}">
                         <b>Name:</b>{{$item['name']}} 

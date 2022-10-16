@@ -18,7 +18,8 @@ class CreateExamsTable extends Migration
             $table->integer('consultation_id');
             $table->integer('test_id');
             $table->text('report')->nullable();
-            $table->text('comment')->nullable();
+            $table->text('comment_from_lab')->nullable();
+            $table->text('comment_from_doctor')->nullable();
             $table->integer('is_resent')->default(0);
             $table->integer('is_once_sent_to_consult')->default(0);
             $table->timestamps();

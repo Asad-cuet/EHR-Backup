@@ -13,7 +13,7 @@ class LabController extends Controller
 {
     public function lab()
     {
-        $lab=consultation::where('is_on_exam',1)->where('is_examed',0)->orderBy('updated_at','desc')->get();
+        $lab=consultation::where('is_on_exam',1)->orderBy('updated_at','desc')->get();
         $lab_data=collect($lab)->map(function($item,$key)
         {
             return [
@@ -156,7 +156,7 @@ class LabController extends Controller
             //dd('catch');
             $file=$request->file('updated_report');
             $extention=$file->getClientOriginalExtension();  
-            if(array_search($extention,['example','jpg','png','jprg','gif','pdf']))
+            if(array_search($extention,['example','jpg','png','jpeg','gif','pdf']))
             {
                  $filename=time().'.'.$extention;
                  $file->move('assets/report/',$filename);  
@@ -240,6 +240,10 @@ class LabController extends Controller
         {
             return back()->with('danger',"Can not send without updating the Re-Sent test");
         }
+        if(Exam::where('consultation_id',$consultation_id)->where('report',0)->exists())
+        {
+            return back()->with('danger',"Can not send without uploading report");
+        }
 
         $data=[
         'is_on_exam'=>0
@@ -256,12 +260,25 @@ class LabController extends Controller
     public function lab_comment(Request $request,$exam_id)
     {
         
-        if(empty($request->input('comment')))
+        if(empty($request->input('comment_from_lab')))
         {
             return redirect()->back()->with('danger',"Comment can't be empty");
         }
         $data=[
-        'comment'=>$request->input('comment')
+        'comment_from_lab'=>$request->input('comment_from_lab')
+        ];
+        Exam::where('id',$exam_id)->update($data);
+        return redirect()->back()->with('status', "Commented in a report");
+    }
+    public function doctor_comment_to_lab(Request $request,$exam_id)
+    {
+        
+        if(empty($request->input('comment_from_doctor_to_lab')))
+        {
+            return redirect()->back()->with('danger',"Comment can't be empty");
+        }
+        $data=[
+        'comment_from_doctor'=>$request->input('comment_from_doctor_to_lab')
         ];
         Exam::where('id',$exam_id)->update($data);
         return redirect()->back()->with('status', "Commented in a report");

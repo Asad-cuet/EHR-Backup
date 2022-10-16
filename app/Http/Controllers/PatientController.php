@@ -83,6 +83,10 @@ class PatientController extends Controller
     public function patient_update(Request $request,$id)
     {
 
+       if(Patient::where('id',$id)->where('is_cleared',1)->exists())
+       {
+        return back()->with('danger',"For this patient this action is no longer available.");
+       }
         
        $data=[
         'pre_name'=>$request->input('pre_name'),
@@ -120,6 +124,10 @@ class PatientController extends Controller
 
     public function consultant_to(Request $request,$patient_id)
     {
+        if($request->input('doctor_id')==0)
+        {
+            return back()->with('danger',"Can't submit empty");
+        }
         $doctor_department_id=Doctor::where('id',$request->input('doctor_id'))->first()->department_id;
         $data=[
           'patient_id'=>$patient_id,

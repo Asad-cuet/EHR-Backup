@@ -13,7 +13,7 @@
        <th scope="col">Age</th>
        <th scope="col">Weight</th>
        <th scope="col">Phone</th>
-       <th scope="col">Is Clear</th>
+       <th scope="col">Status</th>
        <th scope="col">Action</th>
      </tr>
    </thead>
@@ -28,9 +28,13 @@
          <td>{{$item['phone']}}</td>
          <td>
           @if($item['is_cleared'])
-          <div class="badge  bg-success">Clear</div>
+          <div class="badge  bg-success">Consultation Completed</div>
           @else
-          <div class="badge  bg-danger">Not clear</div>    
+              @if(!$item['is_consulted'])
+                  <div class="badge  bg-danger">Not Consulted</div>    
+              @else
+                  <div class="badge  bg-dark">Consulted</div>    
+              @endif
           @endif
         </td>
          <td>

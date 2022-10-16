@@ -29,15 +29,15 @@ class LoginController extends Controller
    // protected $redirectTo = RouteServiceProvider::HOME;
    protected function authenticated()
    {
-       if(Auth::user()->role_as == 'administration') //1 = Admin Login
+       if(Auth::user()->role_as == 'administration') 
        {
            return redirect(route('home'));
        }
-       elseif(Auth::user()->role_as == 'doctor') // Normal or Default User Login
+       elseif(Auth::user()->role_as == 'doctor') 
        {
            return redirect(route('consultations'));
        }
-       elseif(Auth::user()->role_as == 'lab_tecknician') // Normal or Default User Login
+       elseif(Auth::user()->role_as == 'lab_tecknician') 
        {
            return redirect(route('lab'));
        }

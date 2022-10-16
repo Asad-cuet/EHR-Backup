@@ -73,17 +73,21 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 My Consultation
                             </a>
+                            <a class="nav-link @if(Request::is('consultations-on-lab')) active @endif" href="{{url('consultations-on-lab')}}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                 Patient on Laboratory
+                            </a>
                             <a class="nav-link @if(Request::is('consultations-others')) active @endif" href="{{url('consultations-others')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Other's Consultation
                             </a>
+                            <a class="nav-link @if(Request::is('consultation-history')) active @endif" href="{{url('consultation-history')}}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Consultation History
+                            </a>
                             <a class="nav-link @if(Request::is('all-doctors')) active @endif" href="{{url('all-doctors')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Dotcor's Details
-                            </a>
-                            <a class="nav-link @if(Request::is('consultations-on-lab')) active @endif" href="{{url('consultations-on-lab')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Your Patient on Laboratory
+                                All Dotcor's Information
                             </a>
                       @endif
 

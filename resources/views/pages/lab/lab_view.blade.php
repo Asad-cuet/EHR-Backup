@@ -34,7 +34,7 @@ label {
             <form action="{{url('/submit-report/'.$lab->id)}}" method="post" enctype="multipart/form-data">
             @csrf
             <ul class="list-group">
-                  <li class="list-group-item bg-danger text-white" aria-current="true">Exam</li>
+                  <li class="list-group-item bg-danger text-white" aria-current="true">Exam (Upload report one by one)</li>
                   @for($i=0;$i<count($unique_test_id);$i++)
                   <li class="list-group-item">
                         <b>{{$unique_test_name[$i]}}</b>
@@ -73,16 +73,21 @@ label {
                                           @if($item->is_resent)
                                                 <span class="badge bg-primary">Re-Sent (Update this report)</span>
                                           @endif
-                                          @if($item->comment)
+                                          @if($item->comment_from_doctor)
                                                 <div class="mt-3">
-                                                      <h6>Comment from Laboratory:</h6> {{$item->comment}}
+                                                      <b>Comment From Doctor: </b>{{$item->comment_from_doctor}}
+                                                </div>      
+                                          @endif
+                                          @if($item->comment_from_lab)
+                                                <div class="mt-3">
+                                                      <b>Comment from Laboratory: </b> {{$item->comment_from_lab}}
                                                 </div>
                                           @endif
                                           <div class="mt-3">
                                                 <form action="{{url('/lab-comment/'.$item->id)}}" method="POST">
                                                       @csrf
-                                                      <input type="text" name="comment" placeholder="Write a comment if any">
-                                                      <button type="submit" class="btn btn-warning badge">@if($item->comment)Update Comment @else Comment @endif</button>
+                                                      <input type="text" name="comment_from_lab" placeholder="Write a comment if any">
+                                                      <button type="submit" class="btn btn-warning badge">@if($item->comment_from_lab)Update Comment @else Comment @endif</button>
                                                 </form>
                                           </div>
                                     @else
