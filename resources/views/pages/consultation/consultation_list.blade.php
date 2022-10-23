@@ -12,7 +12,7 @@
 No patient of your is on Laboratory
 </div> 
 @endif
-
+<div style="overflow-x:auto;">
 <table class="table">
    <thead>
      <tr>
@@ -37,16 +37,10 @@ No patient of your is on Laboratory
             @endif
         </td>
          <td>
-            <a href="{{url('/consultation-status/'.$item['id'])}}" class="btn btn-info">Status</a>
-            <a href="{{url('/history/'.$item['patient_id'])}}" class="btn btn-dark">History</a>
-            <a href="{{url('/problem/'.$item['id'])}}" class="btn btn-danger">Problem</a>
-
-            <a href="{{url('/prescribe/'.$item['id'])}}" class="btn btn-warning">Prescribe</a>
-            <a href="{{url('/exam/'.$item['id'])}}" class="btn btn-primary">Exam</a>
-            <a href="{{url('/exam-result/'.$item['id'])}}" class="btn btn-success">Final Statement</a>
+            <a href="{{url('/consultation-status/'.$item['id'])}}" class="btn mb-1 btn-info">Status</a>
             <a href="{{url('/consultant-complete/'.$item['id'])}}" 
             onclick="return confirm('After this action You will be unable to take other actions to this patient')" 
-            class="btn btn-outline-secondary">Complete</a>
+            class="btn mb-1 btn-outline-secondary">Complete</a>
          </td>
          
        </tr>       
@@ -54,4 +48,5 @@ No patient of your is on Laboratory
 
    </tbody>
  </table>
+</div>
 @endsection

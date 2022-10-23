@@ -9,8 +9,16 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+
 class RegisterController extends Controller
 {
+
+
+
+
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -24,12 +32,25 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
+
+
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        event(new Registered($user = $this->create($request->all())));
+        // $this->guard()->login($user);
+        return $this->registered($request, $user)
+                            ?: redirect($this->redirectPath());
+    }
+
+
+
     /**
      * Where to redirect users after registration.
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::All_USER;
 
     /**
      * Create a new controller instance.

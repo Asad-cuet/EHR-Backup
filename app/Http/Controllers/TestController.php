@@ -22,6 +22,10 @@ class TestController extends Controller
 
     public function add_test(Request $request)
     {
+        if(Test::where('test_name',$request->input('test_name'))->exists())
+        {
+            return back()->with('danger',"Named ".$request->input('test_name')." already exist");
+        }
         $data=[
             'test_name'=>$request->input('test_name')
         ];

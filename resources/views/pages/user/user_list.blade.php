@@ -1,10 +1,38 @@
 @extends('layout.lay')
 
-@section('title','Doctors')
+@section('title','All Users')
+
+@section('css')
+<style>
+  .search-bar {
+    max-width:400px;
+  width:100%;
+  margin: auto;
+  }
+  /*autocomplete var */
+
+  ui-menu{
+    z-index: 3500!important;
+  }
+</style>
+
+@endsection
 @section('content')
 
+<!-- Search box -->
+<div class="search-bar mx-auto">
+  <form action="{{url('/search-user')}}" method="POST">
+    @csrf
+  <div class="input-group">
+    <input required type="search" class="form-control" name="searched_key" id="auto_complete" placeholder="Seach User.." aria-label="Username" aria-describedby="basic-addon1">          
+    <button type="submit" class="input-group-text"><i class="fa fa-search"></i></button>
+  </div>
+  </form>
+</div>
+{{-- Search bar ended --}}
 
 
+<div style="overflow-x:auto;">
 <table class="table">
    <thead>
      <tr>
@@ -31,4 +59,5 @@
 
    </tbody>
  </table>
+</div>
 @endsection

@@ -35,11 +35,11 @@ class LoginController extends Controller
        }
        elseif(Auth::user()->role_as == 'doctor') 
        {
-           return redirect(route('consultations'));
+           return redirect(route('home'));
        }
        elseif(Auth::user()->role_as == 'lab_tecknician') 
        {
-           return redirect(route('lab'));
+           return redirect(route('home'));
        }
    }
 

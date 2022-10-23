@@ -8,29 +8,16 @@ use App\Models\Doctor;
 use App\Models\ClinicalHistory;
 use App\Models\consultation;
 use App\Models\Exam;
+use App\Models\Medication;
 use Illuminate\Support\Collection;
 
 class PatientController extends Controller
 {
     public function patients()
     {
-        $patients=Patient::orderBy('id','desc')->get();
-        $patients=collect($patients)->map(function($item,$key)
-        {
-            return [
-                'id'=>$item['id'],
-                'pre_name'=>$item['pre_name'],
-                'fname'=>$item['fname'],
-                'lname'=>$item['lname'],
-                'gender'=>$item['gender'],
-                'age'=>$item['age'],
-                'weight'=>$item['weight'],
-                'address'=>$item['address'],
-                'phone'=>$item['phone'],
-                'is_consulted'=>$item['is_consulted'],
-                'is_cleared'=>$item['is_cleared']
-                 ];
-        });
+        $patients=Patient::orderBy('id','desc')->paginate(50);
+        $patients->history_id='';
+
         return view('pages.patient.patient_list',['patients'=>$patients]);
 
     }
@@ -140,6 +127,7 @@ class PatientController extends Controller
         Patient::where('id',$patient_id)->update($update_data);
         consultation::create($data);
         ClinicalHistory::create(['patient_id'=>$patient_id]);
+        Medication::create(['patient_id'=>$patient_id]);
         return redirect(route('patients'))->with('status','Patient sent to Consultation');
 
 
@@ -151,8 +139,9 @@ class PatientController extends Controller
         $consultation=consultation::where('id',$patient->id)->first();
         $test=Exam::where('consultation_id',$consultation->id)->get();
         $history=ClinicalHistory::where('patient_id',$consultation->patient_id)->first();
+        $medication=Medication::where('patient_id',$consultation->patient_id)->first();
         
-        return view('pages.patient.patient_status',['consultation'=>$consultation,'test'=>$test,'history'=>$history]);
+        return view('pages.patient.patient_status',['consultation'=>$consultation,'test'=>$test,'history'=>$history,'medication'=>$medication]);
 
     }
 }

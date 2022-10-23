@@ -9,7 +9,7 @@ class AdministrationController extends Controller
 {
     public function all_user()
     {
-        $user=User::where('role_as','!=','doctor')->get();
+        $user=User::where('role_as','!=','doctor')->orderBy('created_at','desc')->get();
         $user=collect($user)->map(function($item,$key)
         {
             return [

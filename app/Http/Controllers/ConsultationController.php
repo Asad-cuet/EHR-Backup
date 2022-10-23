@@ -10,6 +10,7 @@ use App\Models\Exam;
 use App\Models\Patient;
 use App\Models\Comment;
 use App\Models\ClinicalHistory;
+use App\Models\Medication;
 class ConsultationController extends Controller
 {
     public function consultations()
@@ -61,11 +62,13 @@ class ConsultationController extends Controller
         $consultation=consultation::where('id',$id)->first();
         $test=Exam::where('consultation_id',$id)->get();
         $history=ClinicalHistory::where('patient_id',$consultation->patient_id)->first();
+        $medication=Medication::where('patient_id',$consultation->patient_id)->first();
         $comments=Comment::where('consultation_id',$id)->get();
         $object=[
             'consultation'=>$consultation,
             'test'=>$test,
             'history'=>$history,
+            'medication'=>$medication,
             'comments'=>$comments
         ];
         return view('pages.consultation.consultation_status',$object);
@@ -90,7 +93,7 @@ class ConsultationController extends Controller
             'problem_duration'=>$request->input('problem_duration')
         ];
         consultation::where('id',$consultation_id)->update($data);
-        return redirect(route('consultations'))->with('status','Problem Details Submited Successfully');
+        return redirect('/consultation-status/'.$consultation_id)->with('status','Problem Details Submited Successfully');
     }
 
 
@@ -129,7 +132,7 @@ class ConsultationController extends Controller
         ];
         consultation::where('id',$consultation_id)->update($data);
 
-        return redirect(route('consultations'))->with('status','Exam Added Successfully');
+        return redirect(route('consultations'))->with('status','The Patient Sent to Laboratory');
     }
 
 
@@ -173,7 +176,7 @@ class ConsultationController extends Controller
             }
           //  dd($all_data);
             
-            return redirect(route('consultations'))->with('status','Prescribe Added Successfully');
+            return redirect('/consultation-status/'.$consultation_id)->with('status','Prescribe Added Successfully');
         }
         
     }
@@ -221,7 +224,7 @@ class ConsultationController extends Controller
             return back()->with('danger',"Access Denied");
         }
 
-
+        $consultation_id=consultation::where('patient_id',$patient_id)->first()->id;
 
 
         $data=[
@@ -238,7 +241,40 @@ class ConsultationController extends Controller
             'pain_on_scale'=>$request->input('pain_on_scale')
         ];
         ClinicalHistory::where('patient_id',$patient_id)->update($data);
-        return redirect(route('consultations'))->with('status','History Submited Successfully');
+        return redirect('/consultation-status/'.$consultation_id)->with('status','History Submited Successfully');
+    }
+
+    public function medication($patient_id)
+    {
+        if(!Medication::where('patient_id',$patient_id)->exists())
+        {
+             return back()->with('danger',"This Patient doesn't exist in Clinical-History Table");
+        }
+
+        $medication=Medication::where('patient_id',$patient_id)->first();
+        return view('pages.consultation.action.medication',['patient_id'=>$patient_id,'medication'=>$medication]);
+    }
+
+    
+    public function submit_medication(Request $request,$patient_id)
+    {
+        if(!consultation::where('patient_id',$patient_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
+        {
+            return back()->with('danger',"Access Denied");
+        }
+
+
+        $consultation_id=consultation::where('patient_id',$patient_id)->first()->id;
+
+        $data=[
+            'medication'=>$request->input('medication'),
+            'dose'=>$request->input('dose'),
+            'route'=>$request->input('route'),
+            'frequency'=>$request->input('frequency'),
+            'last_taken'=>$request->input('last_taken')
+        ];
+        Medication::where('patient_id',$patient_id)->update($data);
+        return redirect('/consultation-status/'.$consultation_id)->with('status','Medication Submited Successfully');
     }
 
 
@@ -253,11 +289,21 @@ class ConsultationController extends Controller
 
     public function submit_exam_result(Request $request,$consultation_id)
     {
+        if(consultation::where('id',$consultation_id)
+        ->where('is_on_exam',1)
+        ->where('consulted_by',Auth::user()->doctor->id)
+        ->exists()) 
+        {
+         return back()->with('danger',"This patient is on exam.During exam,can't take this action.");
+        }
+
+
+
        $data=[
         'exam_result'=>$request->input('exam_result')
        ];
        consultation::where('id',$consultation_id)->update($data);
-       return redirect(route('consultations'))->with('status',"Exam result submitted");
+       return back()->with('status',"Exam result submitted");
 
     }
 

@@ -28,7 +28,7 @@ class OthersConsultationController extends Controller
                  ];
         });
         
-        return view('pages.consultation.others_consultation_list',['consultations'=>$consultations]);
+        return view('pages.consultation.others_consultation_list',['consultations'=>$consultations,'history_view'=>0]);
 
     }
 
@@ -48,10 +48,10 @@ class OthersConsultationController extends Controller
                 'consulted_by'=>$item['id'],
                 'patient_name'=>$patient_name,
                 'patient_phone'=>$item->patient->phone,
-                'doctor_name'=>$item->doctor->user->name,
+                'doctor_name'=>$item->doctor->user->name
                  ];
         });
         
-        return view('pages.consultation.others_consultation_list',['consultations'=>$consultations]);
+        return view('pages.consultation.others_consultation_list',['consultations'=>$consultations,'history_view'=>1]);
     }
 }

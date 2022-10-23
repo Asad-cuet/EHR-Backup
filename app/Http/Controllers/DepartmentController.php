@@ -21,6 +21,10 @@ class DepartmentController extends Controller
 
     public function add_department(Request $request)
     {
+        if(Department::where('name',$request->input('name'))->exists())
+        {
+            return back()->with('danger',"Named ".$request->input('name')." already exist");
+        }
         $data=[
             'name'=>$request->input('name')
         ];

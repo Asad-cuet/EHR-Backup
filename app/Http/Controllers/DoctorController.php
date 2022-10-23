@@ -97,12 +97,9 @@ class DoctorController extends Controller
     public function doctor_update(Request $request,$id)
     {
 
-    if(!$request->input('department_id'))
-    {
-        return redirect()->back()->with('danger','Department can not be empty');
-    }
 
-    if(empty($request->input('phone')) || empty($request->input('specialization')) || empty($request->input('qualification')))
+
+    if(empty($request->input('phone')) || empty($request->input('specialization')) || empty($request->input('qualification')) || empty($request->input('name')))
     {
         return redirect()->back()->with('danger','Any field can not be empty');
     }

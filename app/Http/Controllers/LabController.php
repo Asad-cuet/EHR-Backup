@@ -246,7 +246,8 @@ class LabController extends Controller
         }
 
         $data=[
-        'is_on_exam'=>0
+        'is_on_exam'=>0,
+        'is_examed'=>1
         ];
         consultation::where('id',$consultation_id)->update($data);
         $data=[

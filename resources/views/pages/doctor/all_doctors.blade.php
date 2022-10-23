@@ -4,7 +4,7 @@
 @section('content')
 
 
-
+<div style="overflow-x:auto;">
 <table class="table">
    <thead>
      <tr>
@@ -31,4 +31,5 @@
 
    </tbody>
  </table>
+</div>
 @endsection

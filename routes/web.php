@@ -37,6 +37,7 @@ Route::get('/create', function () {
   }
 });
 
+
 Auth::routes([
     'register' => true, // Registration Routes...
   ]);
@@ -49,6 +50,9 @@ Route::get('/patient-status/{history_id}', [App\Http\Controllers\PatientControll
 // all auth can access
 Route::middleware(['auth'])->group(function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
+Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->name('update_profile');
+Route::get('/test', [App\Http\Controllers\HomeController::class, 'test'])->name('test');
 });
 
 
@@ -81,6 +85,16 @@ Route::get('/tests', [App\Http\Controllers\TestController::class, 'tests'])->nam
 Route::get('/test-form', [App\Http\Controllers\TestController::class, 'test_form'])->name('test_form');
 Route::post('/add-test', [App\Http\Controllers\TestController::class, 'add_test'])->name('add_test');
 
+
+
+Route::post('/search-user', [App\Http\Controllers\SearchController::class, 'search_user'])->name('search_user');
+Route::post('/search-patient', [App\Http\Controllers\SearchController::class, 'search_patient'])->name('search_user');
+Route::post('/search-doctor', [App\Http\Controllers\SearchController::class, 'search_doctor'])->name('search_doctor');
+
+
+
+
+
 });
 
 //only doctor can access
@@ -92,6 +106,7 @@ Route::get('/consultation-status/{id}', [App\Http\Controllers\ConsultationContro
 
 Route::get('/consultant-complete/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'consultant_complete'])->name('consultant_complete');
 Route::get('/consultation-history', [App\Http\Controllers\OthersConsultationController::class, 'patient_history'])->name('patient_history');
+Route::post('/consultation/search-history', [App\Http\Controllers\SearchController::class, 'search_con_history'])->name('search_doctor');
 
 Route::get('/problem/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'problem'])->name('problem');
 Route::post('/submit-problem/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'submit_problem'])->name('submit_problem');
@@ -101,6 +116,11 @@ Route::post('/submit-prescribe/{consultation_id}', [App\Http\Controllers\Consult
 
 Route::get('/history/{patient_id}', [App\Http\Controllers\ConsultationController::class, 'history'])->name('history');
 Route::post('/submit-history/{patient_id}', [App\Http\Controllers\ConsultationController::class, 'submit_history'])->name('submit_history');
+
+Route::get('/medication/{patient_id}', [App\Http\Controllers\ConsultationController::class, 'medication'])->name('medication');
+Route::post('/submit-medication/{patient_id}', [App\Http\Controllers\ConsultationController::class, 'submit_medication'])->name('submit_medication');
+
+
 
 Route::get('/exam-result/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'exam_result'])->name('exam_result');
 Route::post('/submit-exam-result/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'submit_exam_result'])->name('submit_exam_result');
