@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Doctor;
+use App\Models\Patient;
+use App\Models\consultation;
 use Auth;
+
+
 
 // use Xenon\LaravelBDSms\Facades\SMS;
 // use Xenon\LaravelBDSms\Provider\Ssl;
@@ -96,10 +100,165 @@ class HomeController extends Controller
 
     }
 
+    // public function test()
+    // {
+    //     //dd('dsd');
+    //     $response =SMS::shoot("01781856861",'test sms');
+    //     return $response;
+    // }
+    // public function test()
+    // {
+    //     $len=6;
+    //     for($i=1;$i<$len;$i++)
+    //     {
+    //         $patients=Patient::where('id',$i)->first();
+    //         $patients->full_name=$patients->pre_name.' '.$patients->fname.' '.$patients->lname;
+    //         $patients->update();
+    //     }
+    // }
+
+
+    //Exporting patient only
+
+    // public function test()
+    // {
+    //             // Create an array of elements
+    //             $array=[[
+    //                 'pre_name',
+    //                 'fname',
+    //                 'lname',
+    //                 'gender',
+    //                 'phone'
+    //             ]];
+    //             $list=Patient::select(
+    //                 'pre_name',
+    //                 'fname',
+    //                 'lname',
+    //                 'gender',
+    //                 'phone'
+    //             )->get()->toArray();
+
+            
+    //             $array=array_merge($array,$list);
+                
+    //             //dd($array);
+
+
+    //             // Open a file in write mode ('w')
+    //             $fp = fopen('persons3.csv', 'w');
+                
+    //             // Loop through file pointer and a line
+    //             foreach ($array as $fields) {
+    //                 fputcsv($fp, $fields);
+    //             }
+                
+    //             fclose($fp);
+    // }
+
+
+    //Exporting consultation,patient,doctor combinely
+
+    // public function test()
+    // {
+    //             // Create an array of elements
+    //             $array=[[
+    //                 'pre_name',
+    //                 'fname',
+    //                 'lname',
+    //                 'gender',
+    //                 'phone',
+    //                 'Doctor Name',
+    //                 'Doctor Department'
+    //             ]];
+
+
+    //             $list=consultation::get();
+
+    //             foreach($list as $l)
+    //             {
+    //                 $data=[[
+    //                     $l->patient->pre_name,
+    //                     $l->patient->fname,
+    //                     $l->patient->lname,
+    //                     $l->patient->gender,
+    //                     $l->patient->phone,
+    //                     $l->doctor->user->name,
+    //                     $l->doctor->department->name
+    //                 ]];
+    //                 $array=array_merge($array,$data);
+    //             }
+
+
+    //             //dd($array);
+                
+
+
+    //             // Open a file in write mode ('w')
+    //             $fp = fopen('consultation.csv', 'w');
+                
+    //             // Loop through file pointer and a line
+    //             foreach ($array as $fields) {
+    //                 fputcsv($fp, $fields);
+    //             }
+                
+    //             fclose($fp);
+    // }
+
+
+
+
+        //Exporting patient only
+
     public function test()
     {
-        //dd('dsd');
-        $response =SMS::shoot("01781856861",'test sms');
-        return $response;
+                // Create an array of elements
+                $array=[[
+                    'id',
+                    'pre_name',
+                    'fname',
+                    'lname',
+                    'full_name',
+                    'gender',
+                    'age',
+                    'height',
+                    'weight',
+                    'address',
+                    'phone',
+                    'health_insurance',
+                    'guardian_name',
+                    'guardian_phone',
+                    'relationship',
+                    'history_id',
+                    'is_consulted',
+                    'is_cleared',
+                    'created_at',
+                    'updated_at'
+                ]];
+                $list=Patient::get()->toArray();
+
+            
+                $array=array_merge($array,$list);
+                
+                //dd($array);
+
+
+                // Open a file in write mode ('w')
+                $fp = fopen('csv/PatientTable.csv', 'w');
+                
+                // Loop through file pointer and a line
+                foreach ($array as $fields) {
+                    fputcsv($fp, $fields);
+                }
+                
+                fclose($fp);
     }
+
+    //failed
+
+    // public function xlsx()
+    // {
+    //     $list=Patient::get()->toArray();
+    //     $xlsx = Shuchkin\SimpleXLSXGen::fromArray( $list );
+    //     $xlsx->saveAs('xlsx/patients.xlsx'); // or downloadAs('books.xlsx') or $xlsx_content = (string) $xlsx 
+    // }
 }

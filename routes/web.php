@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -52,7 +53,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
 Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->name('update_profile');
-Route::get('/test', [App\Http\Controllers\HomeController::class, 'test'])->name('test');
+Route::get('/test', [App\Http\Controllers\HomeController::class, 'xlsx'])->name('test');
 });
 
 
@@ -94,6 +95,14 @@ Route::post('/search-doctor', [App\Http\Controllers\SearchController::class, 'se
 
 
 
+//Export section
+
+Route::get('/export', [App\Http\Controllers\ExportController::class, 'home']);
+
+
+Route::get('/export/users/xlsx', [App\Http\Controllers\ExportController::class, 'export_xlsx']);
+Route::get('/export/users/csv', [App\Http\Controllers\ExportController::class, 'export_csv']);
+
 
 });
 
@@ -113,6 +122,7 @@ Route::post('/submit-problem/{consultation_id}', [App\Http\Controllers\Consultat
 
 Route::get('/prescribe/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'prescribe'])->name('prescribe');
 Route::post('/submit-prescribe/{consultation_id}', [App\Http\Controllers\ConsultationController::class, 'submit_prescribe'])->name('submit_prescribe');
+Route::get('/prescribe-disallow/{presc_id}',[App\Http\Controllers\ConsultationController::class, 'prescribe_disallow'])->name('prescribe_disallow');
 
 Route::get('/history/{patient_id}', [App\Http\Controllers\ConsultationController::class, 'history'])->name('history');
 Route::post('/submit-history/{patient_id}', [App\Http\Controllers\ConsultationController::class, 'submit_history'])->name('submit_history');
@@ -157,3 +167,5 @@ Route::get('/lab-delete/{exam_id?}/{consultation_id}/{test_id}', [App\Http\Contr
 Route::post('/submit-report/{consultation_id}', [App\Http\Controllers\LabController::class, 'submit_report'])->name('submit_report');
 
 });
+
+

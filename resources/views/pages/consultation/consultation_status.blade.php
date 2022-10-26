@@ -4,6 +4,17 @@
 
 @section('css')
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
+<style>
+    .hover-red:hover {
+      color:red!important;
+    }
+    .hover-other:hover {
+      color:rgb(0, 255, 213)!important;
+    }
+    .hover-dark:hover {
+      color:rgb(30, 40, 148)!important;
+    }
+</style>    
 @endsection
 @section('content')
 
@@ -35,7 +46,7 @@ You gave your <strong>Final Statement</strong>
             <li class="list-group-item"><b>Phone : </b>{{$consultation->patient->phone}} </li>
             <li class="list-group-item"><b>Address : </b>{{$consultation->patient->address}} </li>
             <li class="list-group-item"><b>Guardian Phone : </b>{{$consultation->patient->guardian_phone}} </li>
-
+            
             <li class="list-group-item text-white" aria-current="true" style="background-color: #264E36">Consulting By</li>
             <li class="list-group-item"><b>Name : </b>{{$consultation->doctor->user->name}} </li>
             <li class="list-group-item"><b>Department : </b>{{$consultation->doctor->department->name}} </li>
@@ -47,7 +58,7 @@ You gave your <strong>Final Statement</strong>
                   <li class="list-group-item bg-dark text-white" aria-current="true">
                         History
                         <div class="float-end">
-                              <a href="{{url('/history/'.$consultation['patient_id'])}}" class="btn mb-1 text-white" style="background-color: #6d81a8">Update</a>
+                              <a href="{{url('/history/'.$consultation['patient_id'])}}" class="btn mb-1 text-white hover-other" style="background-color: #6d81a8">Update</a>
                         </div>
                   </li>
                   <li class="list-group-item"><b>Primary Admitting Diagnosis : </b>{{$history->primary_admitting_diagnosis}} </li>
@@ -74,7 +85,7 @@ You gave your <strong>Final Statement</strong>
                   <li class="list-group-item text-white" aria-current="true" style="background-color:#9B2335">
                         Problem
                         <div class="float-end">
-                              <a href="{{url('/problem/'.$consultation['id'])}}" class="btn mb-1 text-white" style="background-color:#292F33">Update</a>
+                              <a href="{{url('/problem/'.$consultation['id'])}}" class="btn mb-1 text-white hover-other" style="background-color:#292F33">Update</a>
                         </div>
                   </li>
                   <li class="list-group-item"><b>Details : </b>{{$consultation->problem_details}} </li>
@@ -84,11 +95,22 @@ You gave your <strong>Final Statement</strong>
                   <li class="list-group-item text-white w3-flat-wet-asphalt" aria-current="true" style="backgro-color:#603cba">
                         Doctor's Prescription
                         <div class="float-end">
-                              <a href="{{url('/prescribe/'.$consultation['id'])}}" class="btn mb-1 text-white" style="background-color:#92a8d1">Update</a>
+                              <a href="{{url('/prescribe/'.$consultation['id'])}}" class="btn mb-1 text-white hover-dark" style="background-color:#92a8d1">Update</a>
                         </div>
                   </li>
                   @foreach ($consultation->prescribe as $item)
-                  <li class="list-group-item"><b>{{$item['title']}} : </b> {{$item['comment']}}</li>
+                  <li class="list-group-item">
+                        <b>{{$item['title']}} : </b> {{$item['comment']}}
+                        @if($item['isAllow'])
+                        <a href="{{url('/prescribe-disallow/'.$item['id'])}}" onclick="return confirm('Once disallowed can not be allowed')" class="float-end btn badge bg-dark hover-red">
+                               Disallow
+                        </a>
+                        @else
+                        <div class="float-end badge" style="background-color:#9B2335">
+                              Disallowed
+                       </div>
+                       @endif
+                  </li>
                   @endforeach
             </ul>
       </div>
@@ -97,7 +119,7 @@ You gave your <strong>Final Statement</strong>
                   <li class="list-group-item text-white" aria-current="true" style="background-color:#55ACEE">
                         Medication
                         <div class="float-end">
-                              <a href="{{url('/medication/'.$consultation['patient_id'])}}" class="btn mb-1 text-white" style="background-color:#292F33">Update</a>
+                              <a href="{{url('/medication/'.$consultation['patient_id'])}}" class="btn mb-1 text-white hover-other" style="background-color:#292F33">Update</a>
                         </div>
                   </li>
                   <li class="list-group-item"><b>Medication : </b>{{$medication->medication}} </li>
@@ -120,7 +142,7 @@ You gave your <strong>Final Statement</strong>
       <li class="list-group-item text-white" aria-current="true" style="background-color: #00758F">
             Given Test
             <div class="float-end">
-                  <a href="{{url('/exam/'.$consultation['id'])}}" class="btn mb-1 text-white" style="background-color:#4040a1">Exam</a>
+                  <a href="{{url('/exam/'.$consultation['id'])}}" class="btn mb-1 text-white hover-other" style="background-color:#4040a1">Exam</a>
             </div>
       </li>
       @foreach ($test as $item)
@@ -144,12 +166,12 @@ You gave your <strong>Final Statement</strong>
                         {{-- doctors to lab comment section start --}}
                         @if($consultation->is_on_exam)
                               @if($item->comment_from_doctor)
-                              <b>Comment From You: </b>{{$item->comment_from_doctor}}
+                              <b>Comment To Laboratory: </b>{{$item->comment_from_doctor}}
                               @endif
                               <div class="mt-3">
                                     <form action="{{url('/doctor-comment-to-lab/'.$item->id)}}" method="POST">
                                           @csrf
-                                          <input type="text" name="comment_from_doctor_to_lab" placeholder="Write a comment if any">
+                                          <input type="text" name="comment_from_doctor_to_lab" placeholder="To Lab Tecknician">
                                           <button type="submit" class="btn btn-warning badge">@if($item->comment_from_doctor)Update Comment @else Comment @endif</button>
                                     </form>
                               </div>
@@ -207,7 +229,7 @@ You gave your <strong>Final Statement</strong>
                   <li class="list-group-item text-white" style="background-color:#2F4F4F" aria-current="true">   
                         Doctor's Final Statement
                         <div class="float-end">
-                              <a href="{{url('/exam-result/'.$consultation['id'])}}" class="btn mb-1" style="background-color:#D1B894">Final Statement</a>
+                              <a href="{{url('/exam-result/'.$consultation['id'])}}" class="btn mb-1 hover-dark" style="background-color:#D1B894">Final Statement</a>
                         </div>
                   </li>
                   <li class="list-group-item">@if($consultation->exam_result){{$consultation->exam_result}} @else Didn't submitted yet @endif</li>
@@ -219,9 +241,9 @@ You gave your <strong>Final Statement</strong>
 
 <div class="container center border border-1 p-4 border-danger" style="text-align:center">
 
-      <a href="{{url('/consultant-complete/'.$item['id'])}}" 
+      <a href="{{url('/consultant-complete/'.$consultation['id'])}}" 
       onclick="return confirm('After this action You will be unable to take any others actions to this patient')" 
-      class="btn mb-1 text-white" style="background-color:#9B1B30">This Consultation is Completed</a>
+      class="btn mb-1 text-white" style="background-color:#9B1B30">Complete this Consultation</a>
       <br>
       <b>After this action You will be unable to take any others actions to this patient</b>
 

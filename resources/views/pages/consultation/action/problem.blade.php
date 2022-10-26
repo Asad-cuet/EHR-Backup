@@ -11,6 +11,7 @@
 
       <div class="row">
             <div class="col">
+                  <label for="inputPassword" class="col-form-label"><b>Problem Details</b></label>
               <textarea required type="text"  name="problem_details" class="form-control" placeholder="Write Problems..." aria-label="First name">@if($consultation->problem_details){{$consultation->problem_details}}@endif</textarea>
             </div>
 
@@ -18,6 +19,7 @@
       <br>
       <div class="row">
             <div class="col">
+                  <label for="inputPassword" class="col-form-label"><b>Duration</b></label>
               <input required type="text" name="problem_duration" class="form-control" placeholder="Problem Duration" aria-label="First name" @if($consultation->problem_details) value="{{$consultation->problem_duration}}" @endif>
             </div>
       </div>

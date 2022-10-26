@@ -64,6 +64,10 @@
                                     <a class="nav-link" href="{{url('/test-form')}}">Add Test</a>
                                 </nav>
                             </div>
+                            <a class="nav-link @if(Request::is('export')) active @endif" href="{{url('/export')}}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-registered"></i></div>
+                                Export
+                            </a>
                       @endif
                      
 
@@ -73,7 +77,9 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 My Consultation
                             </a>
-                            <a class="nav-link @if(Request::is('consultations-on-lab')) active @endif" href="{{url('consultations-on-lab')}}">
+                            <a class="nav-link 
+                            @if(Request::is('consultations-on-lab')) active @endif" href="{{url('consultations-on-lab')}}"
+                            >
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                  Patient on Laboratory
                             </a>

@@ -48,7 +48,8 @@ class OthersConsultationController extends Controller
                 'consulted_by'=>$item['id'],
                 'patient_name'=>$patient_name,
                 'patient_phone'=>$item->patient->phone,
-                'doctor_name'=>$item->doctor->user->name
+                'doctor_name'=>$item->doctor->user->name,
+                'history_id'=>$item->patient->history_id
                  ];
         });
         

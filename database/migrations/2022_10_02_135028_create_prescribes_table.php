@@ -18,6 +18,7 @@ class CreatePrescribesTable extends Migration
             $table->integer('consultation_id');
             $table->text('title');
             $table->text('comment')->nullable();
+            $table->integer('isAllow')->defalut(1);
             $table->timestamps();
         });
     }

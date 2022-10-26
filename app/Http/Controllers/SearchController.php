@@ -92,8 +92,7 @@ class SearchController extends Controller
 
         if($searched_key!='')
         {
-            $patients=Patient::where('fname','LIKE','%'.$searched_key.'%')
-                             ->orWhere('lname','LIKE','%'.$searched_key.'%')
+            $patients=Patient::where('full_name','LIKE','%'.$searched_key.'%')
                              ->orWhere('age','LIKE','%'.$searched_key.'%')
                              ->orWhere('height','LIKE','%'.$searched_key.'%')
                              ->orWhere('weight','LIKE','%'.$searched_key.'%')

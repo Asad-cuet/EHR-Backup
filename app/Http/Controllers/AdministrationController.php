@@ -25,6 +25,11 @@ class AdministrationController extends Controller
     public function delete_user($user_id)
     {
         $user =User::find($user_id);
+        if($user->role_as=='doctor')
+        {
+            return back()->with('danger',"Doctor can't be deleted");
+        }
+        //dd('sss');
         $user->delete();
         return back()->with('status',"User deleted Successfully");
     }

@@ -181,6 +181,26 @@ class ConsultationController extends Controller
         
     }
 
+
+    public function prescribe_disallow($presc_id)
+    {
+       if(!Prescribe::where('id',$presc_id)->exists())
+       {
+            return back()->with('danger',"The Id doesn't exist");
+       }
+       $consultation_id=Prescribe::where('id',$presc_id)->first()->consultation_id;
+       if(!Consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
+       {
+            return back()->with('danger',"Access Denied");
+       }
+
+       Prescribe::where('id',$presc_id)->update(['isAllow'=>0]);
+       return redirect('/consultation-status/'.$consultation_id)->with('status',"One Prescription disallowed");
+
+    }
+
+
+
     public function lab_resend($exam_id,$consultation_id)
     {
         if(!consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
@@ -303,7 +323,7 @@ class ConsultationController extends Controller
         'exam_result'=>$request->input('exam_result')
        ];
        consultation::where('id',$consultation_id)->update($data);
-       return back()->with('status',"Exam result submitted");
+       return redirect('/consultation-status/'.$consultation_id)->with('status',"Exam result submitted");
 
     }
 
@@ -312,7 +332,6 @@ class ConsultationController extends Controller
     {
        if(consultation::where('id',$consultation_id)
        ->where('is_on_exam',1)
-       ->where('consulted_by',Auth::user()->doctor->id)
        ->exists()) 
        {
         return back()->with('danger',"This patient is on exam.During exam,can't take this action.");

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -26,6 +27,20 @@ class User extends Authenticatable
     public function doctor()  //making relationship
     {
          return $this->belongsTo(Doctor::class,'id','user_id');
+    }
+
+
+    public static function getUser()
+    {
+        $records=DB::table('users')->select(
+            'id',
+            'name',
+            'email',
+            'role_as',
+            'created_at',
+            'updated_at'
+            )->get()->toArray();
+        return $records;
     }
     /**
      * The attributes that should be hidden for serialization.

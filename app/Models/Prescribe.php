@@ -12,6 +12,7 @@ class Prescribe extends Model
     protected $fillable=[
         'consultation_id',
         'title',
-        'comment'
+        'comment',
+        'isAllow'
     ];
 }

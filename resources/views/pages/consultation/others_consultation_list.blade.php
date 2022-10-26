@@ -57,7 +57,7 @@
          <td>{{$item['patient_phone']}}</td>
          <td>{{$item['doctor_name']}}</td>
          <td>
-            <a href="{{url('/consultation-status/'.$item['id'])}}" class="btn btn-info">Status</a>
+            <a href="{{url('/patient-status/'.$item['history_id'])}}" class="btn btn-info">Status</a>
          </td>
          
        </tr>       

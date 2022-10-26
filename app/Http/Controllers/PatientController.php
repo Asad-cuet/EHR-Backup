@@ -29,7 +29,7 @@ class PatientController extends Controller
     {
         $history_id=uniqid();
 
-
+      
         if(Patient::where('history_id',$history_id)->exists())
         {
             $history_id.=$request->input('age');
@@ -38,11 +38,12 @@ class PatientController extends Controller
         {
             $history_id=time().$request->input('age');
         }
-        
+        $full_name=$request->input('pre_name').' '.$request->input('fname').' '.$request->input('lname');
        $data=[
         'pre_name'=>$request->input('pre_name'),
         'fname'=>$request->input('fname'),
         'lname'=>$request->input('lname'),
+        'full_name'=>$full_name,
         'gender'=>$request->input('gender'),
         'age'=>$request->input('age'),
         'height'=>$request->input('height'),
@@ -55,7 +56,6 @@ class PatientController extends Controller
         'relationship'=>$request->input('relationship'),
         'history_id'=>$history_id
        ];
-
         Patient::create($data);                    
         return redirect(route('patients'))->with('status','Patient Added Successfully');
     }
@@ -135,13 +135,39 @@ class PatientController extends Controller
 
     public function patient_status($history_id)
     {
+        // $patient=Patient::where('history_id',$history_id)->first();
+        // $consultation=consultation::where('id',$patient->id)->first();
+        // $test=Exam::where('consultation_id',$consultation->id)->get();
+        // $history=ClinicalHistory::where('patient_id',$consultation->patient_id)->first();
+        // $medication=Medication::where('patient_id',$consultation->patient_id)->first();
+        
+        // return view('pages.patient.patient_status',['consultation'=>$consultation,'test'=>$test,'history'=>$history,'medication'=>$medication]);
+
+
+        if(!Patient::where('history_id',$history_id)->exists())
+        {
+            return "The ID doesn't exist";
+        }
         $patient=Patient::where('history_id',$history_id)->first();
-        $consultation=consultation::where('id',$patient->id)->first();
+
+
+        if(!consultation::where('patient_id',$patient->id)->exists())
+        {
+            return "This Patient not consulted yet";
+        }
+        $consultation=consultation::where('patient_id',$patient->id)->first();
+
+
+
         $test=Exam::where('consultation_id',$consultation->id)->get();
         $history=ClinicalHistory::where('patient_id',$consultation->patient_id)->first();
         $medication=Medication::where('patient_id',$consultation->patient_id)->first();
-        
-        return view('pages.patient.patient_status',['consultation'=>$consultation,'test'=>$test,'history'=>$history,'medication'=>$medication]);
-
+        $object=[
+            'consultation'=>$consultation,
+            'test'=>$test,
+            'history'=>$history,
+            'medication'=>$medication
+        ];
+        return view('pages.patient.patient_status',$object);
     }
 }
