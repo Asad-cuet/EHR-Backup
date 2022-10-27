@@ -53,6 +53,6 @@ class OthersConsultationController extends Controller
                  ];
         });
         
-        return view('pages.consultation.others_consultation_list',['consultations'=>$consultations,'history_view'=>1]);
+        return view('pages.consultation.consultation_history',['consultations'=>$consultations,'history_view'=>1]);
     }
 }

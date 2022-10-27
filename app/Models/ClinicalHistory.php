@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Facades\DB;
+
 class ClinicalHistory extends Model
 {
     use HasFactory;
@@ -23,4 +25,11 @@ class ClinicalHistory extends Model
         'oxygen_seturation',
         'pain_on_scale'
     ];
+
+
+    public static function getClinicalHistory()
+    {
+        $records=DB::table('clinical_histories')->get()->toArray();
+        return $records;
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Comment extends Model
 {
@@ -16,8 +17,9 @@ class Comment extends Model
         'comment'
     ];
 
-    public function doctor()  //making relationship
+    public static function getComment()
     {
-         return $this->belongsTo(Doctor::class,'comment_by_doctor_id','id');
+    $records=DB::table('comments')->get()->toArray();
+    return $records;
     }
 }

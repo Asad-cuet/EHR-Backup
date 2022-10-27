@@ -99,9 +99,35 @@ Route::post('/search-doctor', [App\Http\Controllers\SearchController::class, 'se
 
 Route::get('/export', [App\Http\Controllers\ExportController::class, 'home']);
 
-
 Route::get('/export/users/xlsx', [App\Http\Controllers\ExportController::class, 'export_xlsx']);
 Route::get('/export/users/csv', [App\Http\Controllers\ExportController::class, 'export_csv']);
+
+Route::get('/export/patient/xlsx', [App\Http\Controllers\ExportController::class, 'patient_xlsx']);
+Route::get('/export/patient/csv', [App\Http\Controllers\ExportController::class, 'patient_csv']);
+
+Route::get('/export/clinical/history/xlsx', [App\Http\Controllers\ExportController::class, 'clinical_history_xlsx']);
+Route::get('/export/clinical/history/csv', [App\Http\Controllers\ExportController::class, 'clinical_history_csv']);
+
+Route::get('/export/medication/xlsx', [App\Http\Controllers\ExportController::class, 'medication_xlsx']);
+Route::get('/export/medication/csv', [App\Http\Controllers\ExportController::class, 'medication_csv']);
+
+Route::get('/export/consultation/xlsx', [App\Http\Controllers\ExportController::class, 'consultation_xlsx']);
+Route::get('/export/consultation/csv', [App\Http\Controllers\ExportController::class, 'consultation_csv']);
+
+Route::get('/export/exam/xlsx', [App\Http\Controllers\ExportController::class, 'exam_xlsx']);
+Route::get('/export/exam/csv', [App\Http\Controllers\ExportController::class, 'exam_csv']);
+
+Route::get('/export/prescribe/xlsx', [App\Http\Controllers\ExportController::class, 'prescribe_xlsx']);
+Route::get('/export/prescribe/csv', [App\Http\Controllers\ExportController::class, 'prescribe_csv']);
+
+Route::get('/export/doctor/xlsx', [App\Http\Controllers\ExportController::class, 'doctor_xlsx']);
+Route::get('/export/doctor/csv', [App\Http\Controllers\ExportController::class, 'doctor_csv']);
+
+Route::get('/export/department/xlsx', [App\Http\Controllers\ExportController::class, 'department_xlsx']);
+Route::get('/export/department/csv', [App\Http\Controllers\ExportController::class, 'department_csv']);
+
+Route::get('/export/comment/xlsx', [App\Http\Controllers\ExportController::class, 'comment_xlsx']);
+Route::get('/export/comment/csv', [App\Http\Controllers\ExportController::class, 'comment_csv']);
 
 
 });

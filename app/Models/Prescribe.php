@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Prescribe extends Model
 {
@@ -15,4 +16,10 @@ class Prescribe extends Model
         'comment',
         'isAllow'
     ];
+
+    public static function getPrescribe()
+    {
+    $records=DB::table('prescribes')->get()->toArray();
+    return $records;
+    }
 }

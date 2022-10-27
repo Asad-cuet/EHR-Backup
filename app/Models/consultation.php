@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class consultation extends Model
 {
@@ -15,16 +16,9 @@ class consultation extends Model
         'department_id',   //doctor's department_id
         'problem_details',
         'problem_duration',
-        'pre_prescribe',
         'is_examed',
         'is_on_exam',
-        'exam',
-        'test_image',
-        'test_comment',
-        'test_details',
         'exam_result',
-        'final_prescribe',
-        'patient_feedback',
         'is_complete'
     ];
     public function patient()  //making relationship
@@ -43,4 +37,10 @@ class consultation extends Model
                 {
                      return $this->hasMany(Exam::class,'id','consultation_id');
                 }
+
+     public static function getConsultation()
+     {
+     $records=DB::table('consultations')->get()->toArray();
+     return $records;
+     }
 }

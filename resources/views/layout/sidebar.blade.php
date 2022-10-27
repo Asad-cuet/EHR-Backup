@@ -65,8 +65,8 @@
                                 </nav>
                             </div>
                             <a class="nav-link @if(Request::is('export')) active @endif" href="{{url('/export')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-registered"></i></div>
-                                Export
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Export Table
                             </a>
                       @endif
                      

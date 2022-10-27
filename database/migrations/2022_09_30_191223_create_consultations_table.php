@@ -22,18 +22,13 @@ class CreateConsultationsTable extends Migration
 
             $table->longText('problem_details')->nullable();  
             $table->text('problem_duration')->nullable();  
-            $table->longText('pre_prescribe')->nullable();  
             
             $table->integer('is_examed')->nullable()->default(0); // 1 or 0
             $table->integer('is_on_exam')->nullable()->default(0); // 1 or 0
-            $table->longText('exam')->nullable();  //test  
-            $table->longText('test_image')->nullable();
-            $table->longText('test_comment')->nullable();
-            $table->longText('test_details')->nullable();
+
 
             $table->longText('exam_result')->nullable(); 
-            $table->longText('final_prescribe')->nullable(); 
-            $table->longText('patient_feedback')->nullable(); 
+
             $table->integer('is_complete')->nullable()->default(0); // 1 or 0
 
             $table->timestamps();
