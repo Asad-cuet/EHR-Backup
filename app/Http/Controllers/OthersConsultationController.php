@@ -13,6 +13,7 @@ class OthersConsultationController extends Controller
         $consultations=consultation::where('is_on_exam',0)
         ->where('department_id',Auth::user()->doctor->department_id)
         ->where('consulted_by','!=',Auth::user()->doctor->id)
+        ->where('is_complete','!=',1)
         ->orderBy('updated_at','desc')->get();
 
         $consultations=collect($consultations)->map(function($item,$key)
@@ -24,6 +25,7 @@ class OthersConsultationController extends Controller
                 'consulted_by'=>$item['id'],
                 'patient_name'=>$patient_name,
                 'patient_phone'=>$item->patient->phone,
+                'doctor_id'=>$item->doctor->id,
                 'doctor_name'=>$item->doctor->user->name,
                  ];
         });

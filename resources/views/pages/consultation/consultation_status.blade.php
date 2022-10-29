@@ -48,7 +48,9 @@ You gave your <strong>Final Statement</strong>
             <li class="list-group-item"><b>Guardian Phone : </b>{{$consultation->patient->guardian_phone}} </li>
             
             <li class="list-group-item text-white" aria-current="true" style="background-color: #264E36">Consulting By</li>
-            <li class="list-group-item"><b>Name : </b>{{$consultation->doctor->user->name}} </li>
+            <li class="list-group-item"><b>Name : </b>
+                  <a href="{{url('/doctor-details/'.$consultation->doctor['id'])}}" class="">{{$consultation->doctor->user->name}}</a>
+            </li>
             <li class="list-group-item"><b>Department : </b>{{$consultation->doctor->department->name}} </li>
       </ul>
       </div>
@@ -98,6 +100,11 @@ You gave your <strong>Final Statement</strong>
                               <a href="{{url('/prescribe/'.$consultation['id'])}}" class="btn mb-1 text-white hover-dark" style="background-color:#92a8d1">Update</a>
                         </div>
                   </li>
+                  @if(!count($consultation->prescribe))
+                        <li class="list-group-item" aria-current="true">
+                              Empty
+                        </li>
+                  @endif
                   @foreach ($consultation->prescribe as $item)
                   <li class="list-group-item">
                         <b>{{$item['title']}} : </b> {{$item['comment']}}
@@ -145,6 +152,11 @@ You gave your <strong>Final Statement</strong>
                   <a href="{{url('/exam/'.$consultation['id'])}}" class="btn mb-1 text-white hover-other" style="background-color:#4040a1">Exam</a>
             </div>
       </li>
+      @if(!count($test))
+            <li class="list-group-item" aria-current="true">
+                  Empty
+            </li>
+      @endif
       @foreach ($test as $item)
             <li class="list-group-item">
                   

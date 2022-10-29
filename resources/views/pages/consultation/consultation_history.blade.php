@@ -54,7 +54,7 @@
        <th scope="col">ID</th>
        <th scope="col">Patient Name</th>
        <th scope="col">Patient Phone</th>
-       <th scope="col">@if($history_view) Consulted By  @else Consulting By @endif</th>
+       <th scope="col">Consulted By</th>
        <th scope="col">Action</th>
      </tr>
    </thead>
@@ -66,7 +66,7 @@
          <td>{{$item->patient['phone']}}</td>
          <td>
               @if($item->doctor->user['id']!=Auth::user()->id)
-                  {{$item->doctor->user['name']}}
+                  <a href="{{url('/doctor-details/'.$item->doctor['id'])}}" class="">{{$item->doctor->user['name']}}</a>
               @else
                   You
               @endif    

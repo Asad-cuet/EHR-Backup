@@ -76,9 +76,21 @@
                   <li class="list-group-item"><b>Address : </b>{{$consultation->patient->address}} </li>
                   <li class="list-group-item"><b>Guardian Phone : </b>{{$consultation->patient->guardian_phone}} </li>
                   
-                  <li class="list-group-item text-white" aria-current="true" style="background-color: #264E36">Consulting By</li>
+                  <li class="list-group-item text-white" aria-current="true" style="background-color: #264E36">
+                        @if($consultation->is_complete)
+                        Consulted By
+                        @else
+                        Consulting By
+                        @endif
+                  </li>
                   <li class="list-group-item"><b>Name : </b>{{$consultation->doctor->user->name}} </li>
                   <li class="list-group-item"><b>Department : </b>{{$consultation->doctor->department->name}} </li>
+                  @if($consultation->doctor->qualification)
+                        <li class="list-group-item"><b>Qualification : </b>{{$consultation->doctor->qualification}} </li>
+                  @endif
+                  @if($consultation->doctor->specialization)
+                        <li class="list-group-item"><b>Specialization : </b>{{$consultation->doctor->specialization}} </li>
+                  @endif
             </ul>
             </div>
             <div class="col-sm">
@@ -118,6 +130,11 @@
                         <li class="list-group-item text-white w3-flat-wet-asphalt" aria-current="true" style="backgro-color:#603cba">
                               Doctor's Prescription
                         </li>
+                        @if(!count($consultation->prescribe))
+                              <li class="list-group-item" aria-current="true">
+                                    Empty
+                              </li>
+                        @endif
                         @foreach ($consultation->prescribe as $item)
                         <li class="list-group-item">
                               <b>{{$item['title']}} : </b> {{$item['comment']}}
@@ -155,6 +172,11 @@
             <li class="list-group-item text-white" aria-current="true" style="background-color: #00758F">
                   Given Test
             </li>
+            @if(!count($test))
+                  <li class="list-group-item" aria-current="true">
+                        Empty
+                  </li>
+            @endif
             @foreach ($test as $item)
                   <li class="list-group-item">
                         
