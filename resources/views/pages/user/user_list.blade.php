@@ -45,6 +45,7 @@
    </thead>
    <tbody>
       @foreach ($user as $item)
+      @if($item['role_as']!='doctor')
       <tr>
          <td>{{$item['id']}}</td>
          <td>{{$item['name']}}</td>
@@ -54,7 +55,8 @@
             <a href="{{url('/delete-user/'.$item['id'])}}" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
          </td>
          
-       </tr>       
+       </tr>
+       @endif       
       @endforeach
 
    </tbody>

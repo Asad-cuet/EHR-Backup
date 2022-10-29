@@ -17,6 +17,15 @@
     
     </style> --}}
 
+    <style>
+      nav svg {
+               height:20px;
+      }    
+      ui-menu{
+        z-index: 3500!important;
+      }        
+        
+        </style>
 @endsection
 
 
@@ -53,11 +62,17 @@
       @foreach ($consultations as $item)
       <tr>
          <td>{{$item['id']}}</td>
-         <td>{{$item['patient_name']}}</td>
-         <td>{{$item['patient_phone']}}</td>
-         <td>{{$item['doctor_name']}}</td>
+         <td>{{$item->patient['full_name']}}</td>
+         <td>{{$item->patient['phone']}}</td>
          <td>
-            <a href="{{url('/patient-status/'.$item['history_id'])}}" class="btn btn-info">Status</a>
+              @if($item->doctor->user['id']!=Auth::user()->id)
+                  {{$item->doctor->user['name']}}
+              @else
+                  You
+              @endif    
+        </td>
+         <td>
+            <a href="{{url('/patient-status/'.$item->patient['history_id'])}}" class="btn btn-info">Status</a>
          </td>
          
        </tr>       
@@ -66,5 +81,9 @@
    </tbody>
  </table>
 </div>
+
+<div class="mx-auto align-right">
+  {{$consultations->links('.....vendor.pagination.bootstrap-4')}}
+ </div>
 
 @endsection

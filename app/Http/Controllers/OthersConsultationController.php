@@ -36,22 +36,21 @@ class OthersConsultationController extends Controller
     {
         $consultations=consultation::where('is_complete',1)
         ->where('department_id',Auth::user()->doctor->department_id)
-        ->where('consulted_by',Auth::user()->doctor->id)
-        ->orderBy('updated_at','desc')->get();
+        ->orderBy('updated_at','desc')->paginate(30);
 
-        $consultations=collect($consultations)->map(function($item,$key)
-        {
-            $patient_name=$item->patient->pre_name.' '.$item->patient->fname;
-            return [
-                'id'=>$item['id'],
-                'patient_id'=>$item['id'],
-                'consulted_by'=>$item['id'],
-                'patient_name'=>$patient_name,
-                'patient_phone'=>$item->patient->phone,
-                'doctor_name'=>$item->doctor->user->name,
-                'history_id'=>$item->patient->history_id
-                 ];
-        });
+        // $consultations=collect($consultations)->map(function($item,$key)
+        // {
+        //     $patient_name=$item->patient->pre_name.' '.$item->patient->fname;
+        //     return [
+        //         'id'=>$item['id'],
+        //         'patient_id'=>$item['id'],
+        //         'consulted_by'=>$item['id'],
+        //         'patient_name'=>$patient_name,
+        //         'patient_phone'=>$item->patient->phone,
+        //         'doctor_name'=>$item->doctor->user->name,
+        //         'history_id'=>$item->patient->history_id
+        //          ];
+        // });
         
         return view('pages.consultation.consultation_history',['consultations'=>$consultations,'history_view'=>1]);
     }

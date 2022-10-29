@@ -84,7 +84,7 @@ class ConsultationController extends Controller
     {
         if(!consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
         {
-            return back()->with('danger',"Access Denied");
+            return back()->with('danger',"You can only take this action to your patient");
         }
 
 
@@ -106,7 +106,7 @@ class ConsultationController extends Controller
     {
         if(!consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
         {
-            return back()->with('danger',"Access Denied");
+            return back()->with('danger',"You can only take this action to your patient");
         }
 
 
@@ -150,7 +150,7 @@ class ConsultationController extends Controller
 
         if(!consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
         {
-            return back()->with('danger',"Access Denied");
+            return back()->with('danger',"You can only take this action to your patient");
         }
 
 
@@ -191,7 +191,7 @@ class ConsultationController extends Controller
        $consultation_id=Prescribe::where('id',$presc_id)->first()->consultation_id;
        if(!Consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
        {
-            return back()->with('danger',"Access Denied");
+            return back()->with('danger',"You can only take this action to your patient");
        }
 
        Prescribe::where('id',$presc_id)->update(['isAllow'=>0]);
@@ -241,7 +241,7 @@ class ConsultationController extends Controller
     {
         if(!consultation::where('patient_id',$patient_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
         {
-            return back()->with('danger',"Access Denied");
+            return back()->with('danger',"You can only take this action to your patient");
         }
 
         $consultation_id=consultation::where('patient_id',$patient_id)->first()->id;
@@ -280,7 +280,7 @@ class ConsultationController extends Controller
     {
         if(!consultation::where('patient_id',$patient_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
         {
-            return back()->with('danger',"Access Denied");
+            return back()->with('danger',"You can only take this action to your patient");
         }
 
 
@@ -330,6 +330,12 @@ class ConsultationController extends Controller
 
     public function consultant_complete($consultation_id)
     {
+        if(!consultation::where('id',$consultation_id)->where('consulted_by',Auth::user()->doctor->id)->exists())
+        {
+            return back()->with('danger',"You can only take this action to your patient");
+        }
+
+
        if(consultation::where('id',$consultation_id)
        ->where('is_on_exam',1)
        ->exists()) 

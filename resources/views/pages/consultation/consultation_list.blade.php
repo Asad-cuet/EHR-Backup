@@ -38,9 +38,6 @@ No patient of your is on Laboratory
         </td>
          <td>
             <a href="{{url('/consultation-status/'.$item['id'])}}" class="btn mb-1 btn-info">Status</a>
-            <a href="{{url('/consultant-complete/'.$item['id'])}}" 
-            onclick="return confirm('After this action You will be unable to take other actions to this patient')" 
-            class="btn mb-1 btn-outline-secondary">Complete</a>
          </td>
          
        </tr>       

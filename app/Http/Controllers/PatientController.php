@@ -16,7 +16,6 @@ class PatientController extends Controller
     public function patients()
     {
         $patients=Patient::orderBy('id','desc')->paginate(50);
-        $patients->history_id='';
 
         return view('pages.patient.patient_list',['patients'=>$patients]);
 
@@ -135,13 +134,6 @@ class PatientController extends Controller
 
     public function patient_status($history_id)
     {
-        // $patient=Patient::where('history_id',$history_id)->first();
-        // $consultation=consultation::where('id',$patient->id)->first();
-        // $test=Exam::where('consultation_id',$consultation->id)->get();
-        // $history=ClinicalHistory::where('patient_id',$consultation->patient_id)->first();
-        // $medication=Medication::where('patient_id',$consultation->patient_id)->first();
-        
-        // return view('pages.patient.patient_status',['consultation'=>$consultation,'test'=>$test,'history'=>$history,'medication'=>$medication]);
 
 
         if(!Patient::where('history_id',$history_id)->exists())

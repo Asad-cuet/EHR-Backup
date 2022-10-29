@@ -61,11 +61,13 @@
          <td>
           @if($item['is_cleared'])
           <div class="badge  bg-success">Consultation Completed</div>
+          <a href="{{url('/patient-status/'.$item['history_id'])}}" class="btn badge" style="background-color:#D69C2F">Status</a>
           @else
               @if(!$item['is_consulted'])
                   <div class="badge  bg-danger">Not Consulted</div>    
               @else
-                  <div class="badge  bg-dark">Consulted</div>    
+                  <div class="badge  bg-dark">Consulted</div>   
+                  <a href="{{url('/patient-status/'.$item['history_id'])}}" class="btn badge" style="background-color:#D69C2F">Status</a> 
               @endif
           @endif
         </td>

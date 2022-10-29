@@ -1,11 +1,15 @@
 @extends('layout.lay')
 
-@section('title','Patient Registration')
+@section('title','Patient Details')
 @section('content')
 
 
 <div class="" style="">
-<h3 class="">Patient Details</h3>
+<h3 class="">
+  Patient Details
+  <a href="{{url('/patient-status/'.$patient['history_id'])}}" class="btn badge" style="background-color:#D69C2F">Status</a>
+</h3>
+
 <br>
 <form method="POST" action="{{url('/update-patient/'.$patient->id)}}">
       @csrf

@@ -16,6 +16,10 @@ class Comment extends Model
         'comment_by_doctor_id',
         'comment'
     ];
+    public function doctor()  //making relationship
+    {
+         return $this->belongsTo(Doctor::class,'comment_by_doctor_id','id');
+    }
 
     public static function getComment()
     {

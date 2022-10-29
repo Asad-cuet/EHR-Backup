@@ -25,149 +25,191 @@
 <body>
 
 
-<div class="container-fluid mt-4">
+
+@if(Auth::user())
+<div class="sb-nav-fixed">
 
 
-
-{{-- information and history section start --}}
-
-<div class="row">
-      <div class="col-sm">
-      <ul class="list-group">
-            <li class="list-group-item" aria-current="true" style="background-color:#D69C2F">
-                  Patient Basic Information
-            </li>
-            <li class="list-group-item"><b>Name : </b>{{$consultation->patient->pre_name}} {{$consultation->patient->fname}} {{$consultation->patient->lname}} </li>
-            <li class="list-group-item"><b>Gender : </b>{{$consultation->patient->gender}} </li>
-            <li class="list-group-item"><b>Age : </b>{{$consultation->patient->age}} </li>
-            <li class="list-group-item"><b>Height : </b>{{$consultation->patient->height}} (Fit.inchi)</li>
-            <li class="list-group-item"><b>Wight : </b>{{$consultation->patient->weight}} Kg</li>
-            <li class="list-group-item"><b>Phone : </b>{{$consultation->patient->phone}} </li>
-            <li class="list-group-item"><b>Address : </b>{{$consultation->patient->address}} </li>
-            <li class="list-group-item"><b>Guardian Phone : </b>{{$consultation->patient->guardian_phone}} </li>
-            
-            <li class="list-group-item text-white" aria-current="true" style="background-color: #264E36">Consulting By</li>
-            <li class="list-group-item"><b>Name : </b>{{$consultation->doctor->user->name}} </li>
-            <li class="list-group-item"><b>Department : </b>{{$consultation->doctor->department->name}} </li>
-      </ul>
-      </div>
-      <div class="col-sm">
-            <ul class="list-group">
-
-                  <li class="list-group-item bg-dark text-white" aria-current="true">
-                        History
-                  </li>
-                  <li class="list-group-item"><b>Primary Admitting Diagnosis : </b>{{$history->primary_admitting_diagnosis}} </li>
-                  <li class="list-group-item"><b>Permanant History : </b>{{$history->permanant_history}} </li>
-                  <li class="list-group-item"><b>Previous Medical History : </b>{{$history->previous_medical_history}} </li>
-                  <li class="list-group-item"><b>Surgical History : </b>{{$history->surgical_history}} </li>
-                  <li class="list-group-item"><b>Smoker : </b>@if($history->smoker==1) Yes @else No @endif </li>
-                  <li class="list-group-item"><b>Diabetes : </b>@if($history->diabetes==1) Yes @else No @endif </li>
-                  <li class="list-group-item"><b>Heart Rate : </b>{{$history->heart_rate}} </li>
-                  <li class="list-group-item"><b>BP Systole : </b>{{$history->bp_systole}} </li>
-                  <li class="list-group-item"><b>BP Diastole : </b>{{$history->bp_diastole}} </li>
-                  <li class="list-group-item"><b>Oxygen Seturation : </b>{{$history->oxygen_seturation}} </li>
-                  <li class="list-group-item"><b>Pain On Scale : </b>@if($history->pain_on_scale==1) Yes @else No @endif </li>
-            </ul>
-      </div>
-</div>
-
-<br>
-
-{{-- Prescribe and Medication section start --}}
-<div class="row">
-      <div class="col-sm">
-            <ul class="list-group">
-                  <li class="list-group-item text-white" aria-current="true" style="background-color:#9B2335">
-                        Problem
-                  </li>
-                  <li class="list-group-item"><b>Details : </b>{{$consultation->problem_details}} </li>
-                  <li class="list-group-item"><b>Duration : </b>{{$consultation->problem_duration}} </li>
-
-
-                  <li class="list-group-item text-white w3-flat-wet-asphalt" aria-current="true" style="backgro-color:#603cba">
-                        Doctor's Prescription
-                  </li>
-                  @foreach ($consultation->prescribe as $item)
-                  <li class="list-group-item">
-                        <b>{{$item['title']}} : </b> {{$item['comment']}}
-                        @if(!$item['isAllow'])
-                        <div class="float-end badge" style="background-color:#9B2335">
-                              Disallowed
-                       </div>
-                       @endif
-                  </li>
-                  @endforeach
-            </ul>
-      </div>
-      <div class="col-sm">
-            <ul class="list-group">
-                  <li class="list-group-item text-white" aria-current="true" style="background-color:#55ACEE">
-                        Medication
-                  </li>
-                  <li class="list-group-item"><b>Medication : </b>{{$medication->medication}} </li>
-                  <li class="list-group-item"><b>Dose : </b>{{$medication->dose}} </li>
-                  <li class="list-group-item"><b>Route : </b>{{$medication->route}} </li>
-                  <li class="list-group-item"><b>Frequency : </b>{{$medication->frequency}} </li>
-                  <li class="list-group-item"><b>Last Taken : </b>{{$medication->last_taken}} </li>
-            </ul>
-      </div>
-</div>
-<br>
-
-
-
-
-{{-- exam section start --}}
-
-
-<ul class="list-group">
-      <li class="list-group-item text-white" aria-current="true" style="background-color: #00758F">
-            Given Test
-      </li>
-      @foreach ($test as $item)
-            <li class="list-group-item">
-                  
-                  <h5>{{$item->test->test_name}} : </h5>
-                  @if(!empty($item->report))
-                        <a href="{{asset('assets/report/'.$item->report)}}" class="badge btn btn-dark" target="_blank" rel="noopener noreferrer">View</a>  
-                  @else
-                       <div class="">Didn't Submitted Yet</div>
+@include('layout.nav')
+<div id="layoutSidenav">
+            @include('layout.sidebar')
+            <div id="layoutSidenav_content">
+            <main>
+                  <div class="container-fluid mt-3 px-4">
+                  @if(session()->has('status'))
+                        <div class="alert alert-success" role="alert">
+                              {{session('status')}}   
+                        </div>                
                   @endif
-                  
-                  
-            </li>
-      @endforeach
-</ul>
+                  @if(session()->has('danger'))
+                        <div class="alert alert-danger" role="alert">
+                              {{session('danger')}}   
+                        </div>                
+                  @endif
+@endif                  
 
-<br>
 
-<div class="row">
-      <div class="col-sm">
+
+
+
+{{-- Content Start       --}}
+
+
+
+
+
+
+      {{-- information and history section start --}}
+      
+      <div class="row">
+            <div class="col-sm">
             <ul class="list-group">
-                  <li class="list-group-item text-white" style="background-color:#2F4F4F" aria-current="true">   
-                        Doctor's Final Statement
+                  <li class="list-group-item" aria-current="true" style="background-color:#D69C2F">
+                        Patient Basic Information
                   </li>
-                  <li class="list-group-item">@if($consultation->exam_result){{$consultation->exam_result}} @else Didn't submitted yet @endif</li>
+                  <li class="list-group-item"><b>Name : </b>{{$consultation->patient->pre_name}} {{$consultation->patient->fname}} {{$consultation->patient->lname}} </li>
+                  <li class="list-group-item"><b>Gender : </b>{{$consultation->patient->gender}} </li>
+                  <li class="list-group-item"><b>Age : </b>{{$consultation->patient->age}} </li>
+                  <li class="list-group-item"><b>Height : </b>{{$consultation->patient->height}} (Fit.inchi)</li>
+                  <li class="list-group-item"><b>Wight : </b>{{$consultation->patient->weight}} Kg</li>
+                  <li class="list-group-item"><b>Phone : </b>{{$consultation->patient->phone}} </li>
+                  <li class="list-group-item"><b>Address : </b>{{$consultation->patient->address}} </li>
+                  <li class="list-group-item"><b>Guardian Phone : </b>{{$consultation->patient->guardian_phone}} </li>
+                  
+                  <li class="list-group-item text-white" aria-current="true" style="background-color: #264E36">Consulting By</li>
+                  <li class="list-group-item"><b>Name : </b>{{$consultation->doctor->user->name}} </li>
+                  <li class="list-group-item"><b>Department : </b>{{$consultation->doctor->department->name}} </li>
             </ul>
+            </div>
+            <div class="col-sm">
+                  <ul class="list-group">
+      
+                        <li class="list-group-item bg-dark text-white" aria-current="true">
+                              History
+                        </li>
+                        <li class="list-group-item"><b>Primary Admitting Diagnosis : </b>{{$history->primary_admitting_diagnosis}} </li>
+                        <li class="list-group-item"><b>Permanant History : </b>{{$history->permanant_history}} </li>
+                        <li class="list-group-item"><b>Previous Medical History : </b>{{$history->previous_medical_history}} </li>
+                        <li class="list-group-item"><b>Surgical History : </b>{{$history->surgical_history}} </li>
+                        <li class="list-group-item"><b>Smoker : </b>@if($history->smoker==1) Yes @else No @endif </li>
+                        <li class="list-group-item"><b>Diabetes : </b>@if($history->diabetes==1) Yes @else No @endif </li>
+                        <li class="list-group-item"><b>Heart Rate : </b>{{$history->heart_rate}} </li>
+                        <li class="list-group-item"><b>BP Systole : </b>{{$history->bp_systole}} </li>
+                        <li class="list-group-item"><b>BP Diastole : </b>{{$history->bp_diastole}} </li>
+                        <li class="list-group-item"><b>Oxygen Seturation : </b>{{$history->oxygen_seturation}} </li>
+                        <li class="list-group-item"><b>Pain On Scale : </b>@if($history->pain_on_scale==1) Yes @else No @endif </li>
+                  </ul>
+            </div>
       </div>
+      
+      <br>
+      
+      {{-- Prescribe and Medication section start --}}
+      <div class="row">
+            <div class="col-sm">
+                  <ul class="list-group">
+                        <li class="list-group-item text-white" aria-current="true" style="background-color:#9B2335">
+                              Problem
+                        </li>
+                        <li class="list-group-item"><b>Details : </b>{{$consultation->problem_details}} </li>
+                        <li class="list-group-item"><b>Duration : </b>{{$consultation->problem_duration}} </li>
+      
+      
+                        <li class="list-group-item text-white w3-flat-wet-asphalt" aria-current="true" style="backgro-color:#603cba">
+                              Doctor's Prescription
+                        </li>
+                        @foreach ($consultation->prescribe as $item)
+                        <li class="list-group-item">
+                              <b>{{$item['title']}} : </b> {{$item['comment']}}
+                              @if(!$item['isAllow'])
+                              <div class="float-end badge" style="background-color:#9B2335">
+                                    Disallowed
+                             </div>
+                             @endif
+                        </li>
+                        @endforeach
+                  </ul>
+            </div>
+            <div class="col-sm">
+                  <ul class="list-group">
+                        <li class="list-group-item text-white" aria-current="true" style="background-color:#55ACEE">
+                              Medication
+                        </li>
+                        <li class="list-group-item"><b>Medication : </b>{{$medication->medication}} </li>
+                        <li class="list-group-item"><b>Dose : </b>{{$medication->dose}} </li>
+                        <li class="list-group-item"><b>Route : </b>{{$medication->route}} </li>
+                        <li class="list-group-item"><b>Frequency : </b>{{$medication->frequency}} </li>
+                        <li class="list-group-item"><b>Last Taken : </b>{{$medication->last_taken}} </li>
+                  </ul>
+            </div>
+      </div>
+      <br>
+      
+      
+      
+      
+      {{-- exam section start --}}
+      
+      
+      <ul class="list-group">
+            <li class="list-group-item text-white" aria-current="true" style="background-color: #00758F">
+                  Given Test
+            </li>
+            @foreach ($test as $item)
+                  <li class="list-group-item">
+                        
+                        <h5>{{$item->test->test_name}} : </h5>
+                        @if(!empty($item->report))
+                              <a href="{{asset('assets/report/'.$item->report)}}" class="badge btn btn-dark" target="_blank" rel="noopener noreferrer">View</a>  
+                        @else
+                             <div class="">Didn't Submitted Yet</div>
+                        @endif
+                        
+                        
+                  </li>
+            @endforeach
+      </ul>
+      
+      <br>
+      
+      <div class="row">
+            <div class="col-sm">
+                  <ul class="list-group">
+                        <li class="list-group-item text-white" style="background-color:#2F4F4F" aria-current="true">   
+                              Doctor's Final Statement
+                        </li>
+                        <li class="list-group-item">@if($consultation->exam_result){{$consultation->exam_result}} @else Didn't submitted yet @endif</li>
+                  </ul>
+            </div>
+      </div>
+      
+      <br>
+
+      
+      
+      
+ 
+
+
+
+      {{-- Content End --}}
+
+
+
+
+
+@if(Auth::user())                  
+                  </div>        
+            </main>
+      </div>   
 </div>
-
-
-
-
 </div>
+@endif
 
 
-<br>
 
 
 
-<br>
-<br>
-<br>
-<br>
-<br>
 
 
 
